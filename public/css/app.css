@@ -10882,3 +10882,33 @@ a.text-dark:focus {
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  height: 100vh;
+  width: 60%;
+  margin: 0 auto;
+}
+
+@media (max-width: 992px) {
+  section {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.custom-control-label::before,
+.custom-control-label::after {
+  top: 40%;
+}
+
+.package__block--footer {
+  margin: 30px auto 0 auto;
+}
+
+.package__block--footer p {
+  margin-bottom: 0;
+}
+

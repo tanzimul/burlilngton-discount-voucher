@@ -11,10 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Client\ClientController@index')->name('main');
+Route::get('/reprint-voucher', 'Client\ClientController@reprint')->name('reprint');
 
+//Auth::routes(['register' => false]);
+//Route::get('staff-login')->name('login')->uses('Auth\LoginController@showLoginForm');
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
