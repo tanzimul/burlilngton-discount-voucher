@@ -38,42 +38,27 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('reprint') }}">{{ __('Reprint Voucher') }}</a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
-                            @if ( Route::current()->uri() == 'reprint-voucher')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('main') }}">{{ __('Home') }}</a>
-                            </li>
-                            @else
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('reprint') }}">{{ __('Reprint Voucher') }}</a>
-                            </li>
-                            @endif
-                            
-                            @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @endif
+                        @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        @endif
                         @endguest
 
                         @auth
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                        <li class="nav-item"><a class="nav-link" href="#">{{ Auth::user()->name }}</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
                             </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                         @endauth
                     </ul>
@@ -84,7 +69,7 @@
     <!-- /Header Section -->
 
     <!-- Main Content -->
-    <main>
+    <main class="py-4">
         @yield('content')
     </main>
     <!-- Main Content -->

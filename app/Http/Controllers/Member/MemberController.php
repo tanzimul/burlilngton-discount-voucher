@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class MemberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return view('client.main');
+        return view('member.main');
     }
 
     /**
@@ -24,7 +24,7 @@ class ClientController extends Controller
      */
     public function reprint()
     {
-        return view('client.reprint');
+        return view('member.reprint');
     }
 
     /**

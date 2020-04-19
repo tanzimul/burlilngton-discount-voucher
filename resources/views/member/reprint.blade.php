@@ -1,11 +1,4 @@
-@auth
-    @extends('layouts.admin')
-    <h1>hello from admin</h1>
-@endauth
-@guest
-    @extends('layouts.client')
-    <h1>hello from client</h1>
-@endguest
+@extends('layouts.master')
 @section('content')
 <form action="" method="post">
     @csrf

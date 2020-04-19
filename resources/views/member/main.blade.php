@@ -1,4 +1,4 @@
-@extends('layouts.client')
+@extends('layouts.master')
 
 @section('content')
 <form action="" method="post">
@@ -26,6 +26,18 @@
                                     $49.50 + HST Riding
                                 </label>
                             </div>
+
+                            @auth
+                            <div class="custom-control custom-radio pt-2 package__block--form__radio">
+                                <input type="radio" class="custom-control-input package__block--form__radio--input" id="package2" name="package" value="">
+                                <label class="custom-control-label border border-secondary rounded w-100 p-4 package__block--form__radio--label" for="package2">
+                                    60 & over Seniors Weekdays Reduced Rate (holidays excluded) <br />
+                                    $36.50 + HST Walking <br />
+                                    $49.50 + HST Riding
+                                </label>
+                            </div>
+                            @endauth
+
                             <div class="text-center mt-4 package__block--form__button">
                                 <a class="btn btn-success w-25 text-white package__block--form__button--link" href="#discount">Go</a>
                             </div>
