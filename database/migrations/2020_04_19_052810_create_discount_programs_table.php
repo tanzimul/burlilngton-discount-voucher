@@ -22,7 +22,7 @@ class CreateDiscountProgramsTable extends Migration
             $table->smallInteger('print_count');
             $table->boolean('is_used');
             $table->boolean('is_admin');
-            $table->dateTime('used_at', 0);
+            $table->dateTime('used_at', 0)->nullable();
             $table->timestamps();
 
             $table->foreign('membership_id')->references('id')->on('members');
