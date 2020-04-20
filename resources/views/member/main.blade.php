@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<form action="{{ route('member.store') }}" method="post">
+<form action="{{ route('member.store') }}" method="post" id="memberSignup">
     @csrf
     <!-- Package Selection -->
     <section id="package" class="d-flex align-items-center">
@@ -49,6 +49,11 @@
                                 </label>
                             </div>
                             @endauth
+                            @error('package')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
 
                             <div class="text-center mt-4 package__block--form__button">
                                 <a class="btn btn-success w-25 text-white package__block--form__button--link" href="#discount">Go</a>
@@ -79,25 +84,45 @@
                             <div class="form-group row">
                                 <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstName" name="first_name" value="" required>
+                                    <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    @error('first_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="lastName" name="last_name" value="" required>
+                                    <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    @error('last_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="email" name="email" value="" required>
+                                    <input type="text" class="form-control" id="email" name="email" required>
+                                    @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="confirmEmail" name="confirm_email" value="" required>
+                                    <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required>
+                                    @error('confirm_email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="custom-control custom-checkbox package__block--form__radio">
@@ -106,6 +131,11 @@
                                     Please add me to your list so I can receive news, special events info and <br />
                                     promotional offers (required for all discounts)
                                 </label>
+                                @error('newsletter')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                             <div class="text-center mt-4 discount__block--form__submit-button">
                                 <input class="btn btn-success w-25 text-white discount__block--form__submit-button--link" type="submit" value="Submit">

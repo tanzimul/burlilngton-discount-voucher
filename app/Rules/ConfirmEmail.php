@@ -6,14 +6,16 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ConfirmEmail implements Rule
 {
+
+    public $email;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($email)
     {
-        //
+        $this->email = $email;
     }
 
     /**
@@ -25,7 +27,10 @@ class ConfirmEmail implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $value === $value;
+        if($value === $this->email){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -35,6 +40,6 @@ class ConfirmEmail implements Rule
      */
     public function message()
     {
-        return ':attribute not matched';
+        return 'your email and :attribute did not match';
     }
 }

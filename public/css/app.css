@@ -10912,3 +10912,11 @@ section {
   margin-bottom: 0;
 }
 
+.invalid-feedback {
+  display: block;
+}
+
+.error {
+  color: red;
+}
+

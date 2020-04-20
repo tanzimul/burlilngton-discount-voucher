@@ -18,4 +18,8 @@ class Member extends Model
     protected $fillable = [
         'first_name', 'last_name', 'email'
     ];
+
+    // public function discountList (){
+    //     return $this->hasMany('App\Models\DiscountProgram', 'membership_id', 'id');
+    // }
 }

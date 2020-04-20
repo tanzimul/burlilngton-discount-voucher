@@ -18,4 +18,9 @@ class DiscountProgram extends Model
     protected $fillable = [
         'membership_id', 'membership_type', 'discount_id', 'device', 'print_count', 'is_used', 'is_admin', 'used_at'
     ];
+
+    public function memberData()
+    {
+        return $this->belongsTo('App\Models\Member', 'membership_id', 'id');
+    }
 }

@@ -33,6 +33,35 @@ class MemberController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reprintVoucher(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'discount' => ['required', 'integer'],
+            'email' => ['required', 'string', 'email'],
+        ]);
+
+        if (!($validator->fails())) {
+            $memberSearchByDiscountID = DiscountProgram::where('discount_id', $request['discount'])->with('memberData')->first();
+            if($memberSearchByDiscountID != null){
+                if($memberSearchByDiscountID->memberData->email == $request['email']){
+                    return redirect()->route('reprint')->with('success','An email with your personalized Daily Discount Vouchers has been sent to you.');
+                }else{
+                    return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                }
+            }else{
+                return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+            }
+
+        } else {
+            dd($validator->messages());
+        }
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -55,8 +84,8 @@ class MemberController extends Controller
             'package' => ['required', 'string'],
             'first_name' => ['required', 'string', 'min:2', 'max:100'],
             'last_name' => ['required', 'string', 'min:2', 'max:100'],
-            // 'email' => ['required', 'string', 'email', 'max:100', 'unique:members'],
-            // 'confirm_email' => ['required', new ConfirmEmail],
+            'email' => ['required', 'string', 'email', 'max:100', 'unique:members'],
+            'confirm_email' => ['required', new ConfirmEmail($request['email'])],
         ]);
 
         if (!($validator->fails())) {
@@ -67,15 +96,15 @@ class MemberController extends Controller
                 //dd($maxDiscountProgram);
                 if($maxDiscountProgram == null){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
-
+                    $newsLetter = $this->createNewsLetter($request,$member);
+                                       
                     for ($i = 1000; $i <= 1007; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
                     }
                     
                 } else if($maxDiscountProgram < 6999){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
+                    $newsLetter = $this->createNewsLetter($request,$member);
                     
                     for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i <= 6999; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
@@ -90,7 +119,7 @@ class MemberController extends Controller
                 //dd($maxDiscountProgram);
                 if($maxDiscountProgram == null){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
+                    $newsLetter = $this->createNewsLetter($request,$member);
 
                     for ($i = 7000; $i <= 7007; $i++) { 
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
@@ -98,7 +127,7 @@ class MemberController extends Controller
                     
                 } else if($maxDiscountProgram < 9998){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
+                    $newsLetter = $this->createNewsLetter($request,$member);
 
                     for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i <= 9998; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
@@ -108,12 +137,12 @@ class MemberController extends Controller
                     return redirect()->route('main')->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'flyer') {
-                
+
                 $maxDiscountProgram = DiscountProgram::where('membership_type', 'flyer')->max('discount_id');
                 //dd($maxDiscountProgram);
                 if($maxDiscountProgram == null){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
+                    $newsLetter = $this->createNewsLetter($request,$member);
 
                     for ($i = 100; $i <= 107; $i++) { 
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
@@ -121,7 +150,7 @@ class MemberController extends Controller
                     
                 } else if($maxDiscountProgram < 999){
                     $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($member);
+                    $newsLetter = $this->createNewsLetter($request,$member);
 
                     for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i <= 999; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
@@ -131,14 +160,12 @@ class MemberController extends Controller
                     return redirect()->route('main')->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             }
-            // else if($request['package'] == 'a'){
-
-            // }
 
 
 
             return redirect()->route('main')->with('success','Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
         } else {
+            return redirect()->back()->withErrors($validator);
             dd($validator->messages());
         }
     }
@@ -155,12 +182,18 @@ class MemberController extends Controller
     }
 
 
-    private function createNewsLetter($member){
-        return NewLetter::create([
-            'membership_id' => $member->id,
-            'email' => $member->email,
-            'is_email_sent' => 0
-        ]);
+    private function createNewsLetter($request,$member){
+        if($request->has('newsletter')){
+            if($request['newsletter'] = 'news'){
+                return NewLetter::create([
+                    'membership_id' => $member->id,
+                    'email' => $member->email,
+                    'is_email_sent' => 0
+                ]);
+            }
+        }
+        return null;
+        
     }
 
 

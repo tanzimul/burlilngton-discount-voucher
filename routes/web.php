@@ -13,7 +13,9 @@
 
 Route::get('/', 'Member\MemberController@index')->name('main');
 Route::post('/store-member', 'Member\MemberController@store')->name('member.store');
-Route::get('/reprint-voucher', 'Member\MemberController@reprint')->name('reprint');
+Route::get('/reprint', 'Member\MemberController@reprint')->name('reprint');
+Route::post('/reprint-voucher', 'Member\MemberController@reprintVoucher')->name('reprint.voucher');
+
 
 //Auth::routes(['register' => false]);
 //Route::get('staff-login')->name('login')->uses('Auth\LoginController@showLoginForm');
