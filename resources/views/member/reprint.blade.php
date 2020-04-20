@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<form action="{{ route('reprint.voucher') }}" method="post">
+<form action="{{ route('reprint.voucher') }}" method="post" id="reprintForm">
     @csrf
     <!-- Re-Print Voucher -->
     <section id="reprint" class="d-flex align-items-center">
@@ -32,7 +32,7 @@
                             <div class="form-group row">
                                 <label for="email" class="col-sm-3 col-form-label">Email Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email" required>
                                 </div>
                             </div>
                             <div class="text-center mt-5 reprint__block--form__submit-button">

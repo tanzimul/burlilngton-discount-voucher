@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<form action="{{ route('member.store') }}" method="post" id="memberSignup">
+<form action="{{ route('member.store') }}" method="post" id="memberSignupForm">
     @csrf
     <!-- Package Selection -->
     <section id="package" class="d-flex align-items-center">

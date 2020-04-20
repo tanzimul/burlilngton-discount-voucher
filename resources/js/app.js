@@ -8,7 +8,7 @@ $(document).ready(function () {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(value);
     }, "Please enter a valid email address.");
-    $("#memberSignup").validate({
+    $("#memberSignupForm").validate({
         rules: {
             first_name: "required",
             last_name: "required",
@@ -33,6 +33,21 @@ $(document).ready(function () {
                 equalTo: "Please enter the same email as above"
             },
             
+        }
+    });
+
+    $("#reprintForm").validate({
+        rules: {
+            discount: "required",
+            email: {
+                required: true,
+                email: true,
+                emailCustom: true
+            },
+        },
+        messages: {
+            discount: "Please enter your Discount ID",
+            email: "Please enter a valid email address",
         }
     });
 });
