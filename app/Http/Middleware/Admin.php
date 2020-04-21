@@ -16,12 +16,16 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->role == 2) {
-            return redirect()->route('staff');
-        }
-
-        if (Auth::user()->role == 1) {
-            return $next($request);
+        if(Auth::user()){
+            if (Auth::user()->role == 2) {
+                return redirect()->route('staff');
+            }
+    
+            if (Auth::user()->role == 1) {
+                return $next($request);
+            }
+        }else{
+            return redirect()->route('main');
         }
     }
 }
