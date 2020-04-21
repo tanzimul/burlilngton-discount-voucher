@@ -9,6 +9,8 @@ use App\Models\NewLetter;
 use App\Rules\ConfirmEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PDF;
+use Mail;
 
 class MemberController extends Controller
 {
@@ -40,24 +42,45 @@ class MemberController extends Controller
     public function reprintVoucher(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'discount' => ['required', 'integer'],
+            'discount' => ['required', 'numeric', 'digits_between:2,4'],
             'email' => ['required', 'string', 'email'],
         ]);
 
         if (!($validator->fails())) {
-            $memberSearchByDiscountID = DiscountProgram::where('discount_id', $request['discount'])->with('memberData')->first();
+            // $memberSearchByDiscountID = DiscountProgram::where('discount_id', $request['discount'])->with('memberData')->first();
+            // if($memberSearchByDiscountID != null){
+            //     if($memberSearchByDiscountID->memberData->email == $request['email']){
+            //         return redirect()->route('reprint')->with('success','An email with your personalized Daily Discount Vouchers has been sent to you.');
+            //     }else{
+            //         return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+            //     }
+            // }else{
+            //     return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+            // }
+
+            
+            $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
+                $q->where('email', $request['email']);
+            }])
+                ->where('discount_id', $request['discount'])
+                ->first();
+                //dd($memberSearchByDiscountID);
             if($memberSearchByDiscountID != null){
-                if($memberSearchByDiscountID->memberData->email == $request['email']){
+                if ($memberSearchByDiscountID->memberData != null) {
+                    $printCount = $memberSearchByDiscountID->print_count;
+                    $memberSearchByDiscountID->update([
+                        'print_count' => $printCount+1,
+                    ]);
                     return redirect()->route('reprint')->with('success','An email with your personalized Daily Discount Vouchers has been sent to you.');
                 }else{
-                    return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                    return redirect()->back()->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
                 }
             }else{
-                return redirect()->route('reprint')->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                return redirect()->back()->with('error','Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
             }
 
         } else {
-            dd($validator->messages());
+            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
@@ -157,23 +180,24 @@ class MemberController extends Controller
                     }
 
                 } else {
-                    return redirect()->route('main')->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return redirect()->back()->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             }
 
 
 
-            return redirect()->route('main')->with('success','Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
+            return redirect()->back()->with('success','Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
         } else {
-            return redirect()->back()->withErrors($validator);
-            dd($validator->messages());
+            return redirect()->back()->withErrors($validator)->withInput();
+            //dd($validator->messages());
         }
     }
 
 
 
 
-    private function createMember($request){
+    private function createMember($request)
+    {
         return Member::create([
             'first_name' => $request['first_name'],
             'last_name' => $request['last_name'],
@@ -182,7 +206,8 @@ class MemberController extends Controller
     }
 
 
-    private function createNewsLetter($request,$member){
+    private function createNewsLetter($request,$member)
+    {
         if($request->has('newsletter')){
             if($request['newsletter'] = 'news'){
                 return NewLetter::create([
@@ -197,7 +222,8 @@ class MemberController extends Controller
     }
 
 
-    private function createDiscountProgram($request, $member, $i){
+    private function createDiscountProgram($request, $member, $i)
+    {
         return DiscountProgram::create([
             'membership_id' => $member->id,
             'membership_type' => $request['package'],
@@ -209,6 +235,35 @@ class MemberController extends Controller
             'used_at' => NULL,
         ]);
     }
+
+
+    // private function sendEmailWithAttachment($request)
+    // {
+    //     $data = $request->all();
+
+    //     $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+    //     $data['replyToName'] = env('MAIL_FROM_NAME');
+
+    //     dd($data);
+        
+    //     $pdf = PDF::loadView('pdfs.format1', compact('data'));
+    //     try {
+    //         Mail::send('mails.mail', compact('data'), function ($message) use ($data, $pdf) {
+    //             $message
+    //                 ->to($data['email'], $data['name'])
+    //                 ->replyTo($data['replyTo'], $data['replyToName'])
+    //                 ->subject($data['subject'])
+    //                 ->attachData($pdf->output(), "attachment.pdf");
+    //         });
+    //     } catch (JWTException $exception) {
+    //         return redirect()->back()->with('error', $exception->getMessage());
+    //     }
+    //     if (Mail::failures()) {
+    //         return redirect()->back()->with('error', 'Error sending mail');
+    //     } else {
+    //         return redirect()->back()->with('success', 'Email sent successfully');
+    //     }
+    // }
 
     /**
      * Display the specified resource.

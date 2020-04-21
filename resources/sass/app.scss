@@ -5,10 +5,19 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
 
 html {
     scroll-behavior: smooth;
+    font-family: 'Nunito', sans-serif;
+}
+
+body{
+    font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, div, input, select, option, ul, li, label{
+    font-family: 'Nunito', sans-serif;
 }
 
 section{
@@ -41,4 +50,22 @@ section{
 }
 .error{
     color: red;
+}
+#dailyDiscountRedeemedForm .form-check-input{
+    margin-top: 2.5rem;
+}
+
+@media (max-width: 767px) {
+    #dailyDiscountRedeemedForm .form-check-input {
+        margin-top: .4rem;
+        margin-left: 1.5rem;
+    }
+}
+
+.input-group > .form-control:not(:last-child), .input-group > .custom-select:not(:last-child) {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.input-group-append{
+    display: none;
 }

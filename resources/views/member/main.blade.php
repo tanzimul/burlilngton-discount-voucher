@@ -6,8 +6,17 @@
     <!-- Package Selection -->
     <section id="package" class="d-flex align-items-center">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+            <div class="row justify-content-center">
+                <div class="col-md-10 mb-5">
+                    @if ($errors->any())
+                    <div class="alert alert-danger" id="alertMessage">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     @if(session('success'))
                     <div class="alert alert-success" id="alertMessage">
                         {{ session('success') }}
@@ -49,11 +58,6 @@
                                 </label>
                             </div>
                             @endauth
-                            @error('package')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
 
                             <div class="text-center mt-4 package__block--form__button">
                                 <a class="btn btn-success w-25 text-white package__block--form__button--link" href="#discount">Go</a>
@@ -85,44 +89,24 @@
                                 <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="firstName" name="first_name" required>
-                                    @error('first_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="lastName" name="last_name" required>
-                                    @error('last_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="email" name="email" required>
-                                    @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required>
-                                    @error('confirm_email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="custom-control custom-checkbox package__block--form__radio">
@@ -131,11 +115,6 @@
                                     Please add me to your list so I can receive news, special events info and <br />
                                     promotional offers (required for all discounts)
                                 </label>
-                                @error('newsletter')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
                             </div>
                             <div class="text-center mt-4 discount__block--form__submit-button">
                                 <input class="btn btn-success w-25 text-white discount__block--form__submit-button--link" type="submit" value="Submit">
@@ -143,7 +122,7 @@
                         </div>
                         <div class="mt-5 discount__block--footer">
                             <div class="text-center discount__block--form__back-button">
-                                <a class="btn btn-success w-50 text-white discount__block--form__back-button--link" href="{{ route('main') }}">Return to Home page</a>
+                                <a class="btn btn-success w-50 text-white discount__block--form__back-button--link" href="https://www.burlingtonsprings.com/" target="_blank">Return to Home page</a>
                             </div>
                         </div>
                     </div>

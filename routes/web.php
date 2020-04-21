@@ -23,4 +23,8 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/admin', 'Admin\AdminController@index')->name('admin')->middleware('admin');
-Route::get('/staff', 'Staff\StaffController@index')->name('staff')->middleware('staff');
+Route::get('/report', 'Admin\AdminController@report')->name('report')->middleware('admin');
+Route::get('/daily-discount-and-customer-record-inquiry', 'Staff\StaffController@index')->name('staff.show')->middleware('admin');
+Route::post('/submit-discount', 'Staff\StaffController@submitDiscount')->name('staff.redeem.discount');
+Route::post('/submit-record', 'Staff\StaffController@submitRecord')->name('staff.customer.record');
+

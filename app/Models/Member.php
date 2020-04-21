@@ -19,7 +19,7 @@ class Member extends Model
         'first_name', 'last_name', 'email'
     ];
 
-    // public function discountList (){
-    //     return $this->hasMany('App\Models\DiscountProgram', 'membership_id', 'id');
-    // }
+    public function discountList (){
+        return $this->hasMany('App\Models\DiscountProgram', 'membership_id', 'id');
+    }
 }
