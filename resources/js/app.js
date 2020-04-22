@@ -8,11 +8,15 @@ $(document).ready(function () {
         $('#alertMessage').slideUp("slow");
     }, 5000);
 
+    $('#userTable').DataTable();
+
 
     jQuery.validator.addMethod("emailCustom", function (value, element, params) {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(value);
     }, "Please enter a valid email address.");
+
+
     $("#memberSignupForm").validate({
         rules: {
             first_name: "required",
@@ -38,6 +42,42 @@ $(document).ready(function () {
                 equalTo: "Please enter the same email as above"
             },
 
+        }
+    });
+
+
+    $("#userCreateForm").validate({
+        rules: {
+            name: "required",
+            email: {
+                required: true,
+                email: true,
+                emailCustom: true
+            },
+            password: {
+                required: true,
+                minlength: 5
+            },
+            confirm_password: {
+                required: true,
+                minlength: 5,
+                equalTo: "#password"
+            },
+            role: "required",
+        },
+        messages: {
+            name: "Please enter a name",
+            email: "Please enter a valid email address",
+            password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long"
+            },
+            password_confirmation: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long",
+                equalTo: "Please enter the same password as above"
+            },
+            role: "Please select a role"
         }
     });
 

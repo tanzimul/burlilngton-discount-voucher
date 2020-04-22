@@ -133,7 +133,7 @@ class MemberController extends Controller
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
                     }
                 }else {
-                    return redirect()->route('main')->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return redirect()->back()->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
 
             } else if ($request['package'] == 'senior') {
@@ -157,7 +157,7 @@ class MemberController extends Controller
                     }
 
                 } else {
-                    return redirect()->route('main')->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return redirect()->back()->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'flyer') {
 
