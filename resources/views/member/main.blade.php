@@ -30,18 +30,18 @@
                 </div>
                 <div class="col-md-12">
                     <div class="package__block">
-                        <h1 class="d-flex justify-content-center package__block--title">Burlington Springs Golf and Country Club</h1>
-                        <div class="w-75 m-auto package__block--form">
-                            <div class="custom-control custom-radio pt-2 package__block--form__radio">
-                                <input type="radio" class="custom-control-input package__block--form__radio--input" id="package1" name="package" value="regular" required>
-                                <label class="custom-control-label border border-secondary rounded w-100 p-4 package__block--form__radio--label" for="package1">
+                        <h1 class="d-flex justify-content-center">Burlington Springs Golf and Country Club</h1>
+                        <div class="w-75 m-auto">
+                            <div class="custom-control custom-radio pt-2">
+                                <input type="radio" class="custom-control-input" id="package1" name="package" value="regular" required>
+                                <label class="custom-control-label border border-secondary rounded w-100 p-4" for="package1">
                                     Save $5 Weekdays (open til 3PM) <br />
                                     Save $10 Weekends & Holidays (7am to 3pm)
                                 </label>
                             </div>
-                            <div class="custom-control custom-radio pt-2 package__block--form__radio">
-                                <input type="radio" class="custom-control-input package__block--form__radio--input" id="package2" name="package" value="senior" required>
-                                <label class="custom-control-label border border-secondary rounded w-100 p-4 package__block--form__radio--label" for="package2">
+                            <div class="custom-control custom-radio pt-2">
+                                <input type="radio" class="custom-control-input" id="package2" name="package" value="senior" required>
+                                <label class="custom-control-label border border-secondary rounded w-100 p-4" for="package2">
                                     60 & over Seniors Weekdays Reduced Rate (holidays excluded) <br />
                                     $36.50 + HST Walking <br />
                                     $49.50 + HST Riding
@@ -49,9 +49,9 @@
                             </div>
 
                             @auth
-                            <div class="custom-control custom-radio pt-2 package__block--form__radio">
-                                <input type="radio" class="custom-control-input package__block--form__radio--input" id="package3" name="package" value="flyer" required>
-                                <label class="custom-control-label border border-secondary rounded w-100 p-4 package__block--form__radio--label" for="package3">
+                            <div class="custom-control custom-radio pt-2">
+                                <input type="radio" class="custom-control-input" id="package3" name="package" value="flyer" required>
+                                <label class="custom-control-label border border-secondary rounded w-100 p-4" for="package3">
                                     Frequent Flyers (pro shop assignment only) <br />
                                     $33.50 Weekdays (open till 3PM) <br />
                                     $42.50 Weekends & Holidays (7am to 3pm)
@@ -59,8 +59,8 @@
                             </div>
                             @endauth
 
-                            <div class="text-center mt-4 package__block--form__button">
-                                <a class="btn btn-success w-25 text-white package__block--form__button--link" href="#discount">Go</a>
+                            <div class="text-center mt-4">
+                                <a class="btn btn-success w-25 text-white" href="#discount">Go</a>
                             </div>
                         </div>
                         <div class="w-75 package__block--footer">

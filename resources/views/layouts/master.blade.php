@@ -67,7 +67,7 @@
 
                         @auth
                         @if(Auth::user()->role == 1)
-                        <li class="nav-item"><a class="nav-link" href="#">Report</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('report') }}">Report</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('user.management') }}">User Management</a></li>
                         @endif
                         <li class="nav-item"><a class="nav-link" href="{{ route('staff.show') }}"> Daily Discount & Customer Record </a></li>

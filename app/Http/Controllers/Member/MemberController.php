@@ -9,7 +9,7 @@ use App\Models\NewLetter;
 use App\Rules\ConfirmEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PDF;
+use Barryvdh\DomPDF\PDF;
 use Mail;
 
 class MemberController extends Controller
@@ -236,7 +236,7 @@ class MemberController extends Controller
         ]);
     }
 
-
+    
     // private function sendEmailWithAttachment($request)
     // {
     //     $data = $request->all();

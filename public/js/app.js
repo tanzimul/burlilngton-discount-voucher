@@ -423,9 +423,46 @@ $(document).ready(function () {
       });
     }
   });
+  var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   $('#dateused').datepicker({
     uiLibrary: 'bootstrap4',
     format: 'yyyy-mm-dd',
+    disableDates: function disableDates(date) {
+      var currentDate = new Date();
+      return date < currentDate ? true : false;
+    }
+  });
+  $('#dailyDate').datepicker({
+    uiLibrary: 'bootstrap4',
+    format: 'yyyy-mm-dd',
+    disableDates: function disableDates(date) {
+      var currentDate = new Date();
+      return date < currentDate ? true : false;
+    }
+  });
+  $('#fromDate').datepicker({
+    uiLibrary: 'bootstrap4',
+    // iconsLibrary: 'fontawesome',
+    format: 'yyyy-mm-dd',
+    // minDate: today,
+    maxDate: function maxDate() {
+      return $('#toDate').val();
+    },
+    disableDates: function disableDates(date) {
+      var currentDate = new Date();
+      return date < currentDate ? true : false;
+    }
+  });
+  $('#toDate').datepicker({
+    uiLibrary: 'bootstrap4',
+    // iconsLibrary: 'fontawesome',
+    format: 'yyyy-mm-dd',
+    // maxDate: function () {
+    //     return $('#fromDate').val();
+    // },
+    minDate: function minDate() {
+      return $('#fromDate').val();
+    },
     disableDates: function disableDates(date) {
       var currentDate = new Date();
       return date < currentDate ? true : false;

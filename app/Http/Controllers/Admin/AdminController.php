@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Member;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+//use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class AdminController extends Controller
 {
@@ -108,4 +112,44 @@ class AdminController extends Controller
             return redirect()->back()->with('error','User not deleted !');
         }
     }
+
+
+    public function report()
+    {
+        return view('admin.report');
+    }
+
+    public function export(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'report' => ['required'],
+            'from' => [Rule::requiredIf($request->report == 'redemption_transactions')],
+            'to' => [Rule::requiredIf($request->report == 'redemption_transactions')],
+            'date' => [Rule::requiredIf($request->report == 'daily_reconciliation')],
+        ]);
+
+        if (!($validator->fails())) {
+            if($request->report == 'customer_record'){
+                $customers = Member::with('discountList')->get();
+
+                $pdf = PDF::loadView('pdfs.customer', compact('customers'));
+                $pdf->save(storage_path().'_filename.pdf');
+                return $pdf->download('customers.pdf');
+            }
+        } else {
+            dd($validator->messages());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+
+        return view('admin.report');
+    }
+
+    public function pdfTest()
+    {
+        $customers = Member::with('discountList')->get();
+        return view('pdfs.customer', compact('customers'));
+    }
+
 }
