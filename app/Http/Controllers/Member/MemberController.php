@@ -9,8 +9,10 @@ use App\Models\NewLetter;
 use App\Rules\ConfirmEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 use Mail;
+use env;
+
 
 class MemberController extends Controller
 {
@@ -124,14 +126,17 @@ class MemberController extends Controller
                     for ($i = 1000; $i <= 1007; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
                     }
+                    $sendEmail = $this->sendEmailWithAttachment($request);
                     
                 } else if($maxDiscountProgram < 6999){
                     $member = $this->createMember($request);
                     $newsLetter = $this->createNewsLetter($request,$member);
                     
-                    for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i <= 6999; $i++) {
+                    for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i < 6999; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
                     }
+                    $sendEmail = $this->sendEmailWithAttachment($request);
+                    //dd($sendEmail);
                 }else {
                     return redirect()->back()->with('error','Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
@@ -175,7 +180,7 @@ class MemberController extends Controller
                     $member = $this->createMember($request);
                     $newsLetter = $this->createNewsLetter($request,$member);
 
-                    for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i <= 999; $i++) {
+                    for ($i = $maxDiscountProgram+1; $i <= $maxDiscountProgram+8 && $i < 999; $i++) {
                         $discountProgram = $this->createDiscountProgram($request, $member, $i);
                     }
 
@@ -228,7 +233,7 @@ class MemberController extends Controller
             'membership_id' => $member->id,
             'membership_type' => $request['package'],
             'discount_id' => $i,
-            'device' => 'web',
+            'device' => 'paper',
             'print_count' => 1,
             'is_used' => 0,
             'is_admin' => 0,
@@ -237,33 +242,45 @@ class MemberController extends Controller
     }
 
     
-    // private function sendEmailWithAttachment($request)
-    // {
-    //     $data = $request->all();
+    private function sendEmailWithAttachment($request)
+    {
+        $data = $request->all();
 
-    //     $data['replyTo'] = env('MAIL_FROM_ADDRESS');
-    //     $data['replyToName'] = env('MAIL_FROM_NAME');
+        // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+        // $data['replyToName'] = env('MAIL_FROM_NAME');
 
-    //     dd($data);
-        
-    //     $pdf = PDF::loadView('pdfs.format1', compact('data'));
-    //     try {
-    //         Mail::send('mails.mail', compact('data'), function ($message) use ($data, $pdf) {
-    //             $message
-    //                 ->to($data['email'], $data['name'])
-    //                 ->replyTo($data['replyTo'], $data['replyToName'])
-    //                 ->subject($data['subject'])
-    //                 ->attachData($pdf->output(), "attachment.pdf");
-    //         });
-    //     } catch (JWTException $exception) {
-    //         return redirect()->back()->with('error', $exception->getMessage());
-    //     }
-    //     if (Mail::failures()) {
-    //         return redirect()->back()->with('error', 'Error sending mail');
-    //     } else {
-    //         return redirect()->back()->with('success', 'Email sent successfully');
-    //     }
-    // }
+        $data['replyTo'] = 'quizstarmobile@gmail.com';
+        $data['replyToName'] = 'QuizKing';
+        // $data['imageLogo'] = asset('images/BSG-Logo-2020.png');
+        // $data['imageButton'] = asset('/images/discount-btn.png');
+
+        //dd($data);
+        //PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('pdfs.format1', compact('data'))->setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+
+        //dd($pdf);
+        $message = '';
+        try {
+            Mail::send('mails.format1', compact('data'), function ($message) use ($data, $pdf) {
+                $message
+                    ->to($data['email'], $data['first_name'])
+                    ->replyTo($data['replyTo'], $data['replyToName'])
+                    ->subject('Daily Discount Program Regular Eight Vouchers')
+                    ->attachData($pdf->output(), "attachment.pdf");
+            });
+            return $message = 'email sent';
+        } catch (JWTException $exception) {
+            return $message = 'email not sent'+$exception->getMessage();
+            //return redirect()->back()->with('error', $exception->getMessage());
+        }
+        if (Mail::failures()) {
+            return $message = 'email not sent mail failure';
+            //return redirect()->back()->with('error', 'Error sending mail');
+        } else {
+            return $message = 'email sent success';
+            //return redirect()->back()->with('success', 'Email sent successfully');
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -309,4 +326,7 @@ class MemberController extends Controller
     {
         //
     }
+
+
+    
 }

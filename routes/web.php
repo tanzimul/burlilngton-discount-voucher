@@ -38,7 +38,8 @@ Route::post('/user-delete/{id}', 'Admin\AdminController@delete')->name('user.del
 Route::get('/daily-discount-and-customer-record-inquiry', 'Staff\StaffController@index')->name('staff.show')->middleware('admin');
 Route::post('/submit-discount', 'Staff\StaffController@submitDiscount')->name('staff.redeem.discount');
 Route::post('/submit-record', 'Staff\StaffController@submitRecord')->name('staff.customer.record');
-
+Route::get('/search-user', 'Staff\StaffController@searchUser')->name('staff.user.discount');
 
 
 Route::get('/pdfTest', 'Admin\AdminController@pdfTest');
+Route::get('/pdfView', 'Admin\AdminController@pdfView');

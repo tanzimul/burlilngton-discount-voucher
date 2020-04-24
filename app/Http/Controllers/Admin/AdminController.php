@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\DailyReconciliationExport;
+use App\Exports\MembersExport;
+use App\Exports\RedemptionTransactionsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\User;
@@ -9,8 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-//use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade as PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -131,11 +134,11 @@ class AdminController extends Controller
 
         if (!($validator->fails())) {
             if($request->report == 'customer_record'){
-                $customers = Member::with('discountList')->get();
-
-                $pdf = PDF::loadView('pdfs.customer', compact('customers'));
-                $pdf->save(storage_path().'_filename.pdf');
-                return $pdf->download('customers.pdf');
+                return Excel::download(new MembersExport(), 'Customer List.xlsx');
+            }else if($request->report == 'redemption_transactions'){
+                return Excel::download(new RedemptionTransactionsExport($request->from, $request->to), 'Redemption Transactions List.xlsx');
+            }else if($request->report == 'daily_reconciliation'){
+                return Excel::download(new DailyReconciliationExport($request->date), 'Daily Reconciliation List.xlsx');
             }
         } else {
             dd($validator->messages());
@@ -149,7 +152,25 @@ class AdminController extends Controller
     public function pdfTest()
     {
         $customers = Member::with('discountList')->get();
-        return view('pdfs.customer', compact('customers'));
+        return view('pdfs.format3', compact('customers'));
+    }
+
+    public function pdfView()
+    {
+        //$data = $request->all();
+
+        // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+        // $data['replyToName'] = env('MAIL_FROM_NAME');
+
+        $data['replyTo'] = 'quizstarmobile@gmail.com';
+        $data['replyToName'] = 'QuizKing';
+        $data['imageLogo'] = asset('images/BSG-Logo-2020.png');
+        $data['imageButton'] = asset('/images/discount-btn.png');
+
+        //dd($data);
+        
+        $pdf = PDF::loadView('pdfs.format3', compact('data'));
+        return $pdf->download('test_'. rand() . '_lab.pdf');
     }
 
 }

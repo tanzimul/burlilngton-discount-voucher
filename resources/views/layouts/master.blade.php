@@ -11,7 +11,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|Montserrat&display=swap" rel="stylesheet">
 
 
     <!-- Styles -->
@@ -39,7 +39,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img src="{{ asset('images/BSG-Logo-2020.png') }}" class="img-fluid" style="max-width: 130px;" alt="{{ config('app.name', 'Laravel') }}"/>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -106,7 +106,17 @@
     <main class="py-4">
         @yield('content')
     </main>
-    <!-- Main Content -->
+    <!-- /Main Content -->
+
+    <!-- Footer Section -->
+    <footer>
+        <p class="text-center">
+            Burlington Springs Golf and Country Club | Pro Shop: 905-335-2922 | Toll Free: 1-888-565-7355<br />
+            <p class="text-center">Copyright © 2020 Burlington Springs Golf and Country Club. All Rights Reserved.<br />
+                <img src="{{ asset('images/BSG-Logo-2020.png') }}" class="img-fluid" style="max-width: 130px;" alt="{{ config('app.name', 'Laravel') }}"/>
+            </p>
+    </footer>
+    <!-- /Footer Section -->
 </body>
 
 </html>

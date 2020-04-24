@@ -93,15 +93,50 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-// require('./bootstrap');
-//import '~bootstrap/dist/js/bootstrap';
-// import 'bootstrap';
-//import 'bootstrap/dist/js/bootstrap.bundle';
 $(document).ready(function () {
   setTimeout(function () {
     $('#alertMessage').slideUp("slow");
   }, 5000);
   $('#userTable').DataTable();
+  $('#dailyDiscountRedeemedForm #discount').on('change', function (e) {
+    e.preventDefault();
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#dailyDiscountRedeemedForm #saveForm').html('Searching..');
+    $.ajax({
+      url: $('#dailyDiscountRedeemedForm #discountUserSearchUrl').text(),
+      type: 'GET',
+      data: $('#dailyDiscountRedeemedForm').serialize(),
+      success: function success(response) {
+        // console.log(response);
+        $('#dailyDiscountRedeemedForm #saveForm').html('Save');
+        $('#dailyDiscountRedeemedForm #response').show();
+        $('#dailyDiscountRedeemedForm #alert').show();
+        $('#dailyDiscountRedeemedForm #response').html(response.message);
+        $('#dailyDiscountRedeemedForm #alert').removeClass('d-none');
+
+        if (response.status === true) {
+          $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
+          $('#dailyDiscountRedeemedForm #lastname').val(response.data);
+        } else {
+          $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
+          $('#dailyDiscountRedeemedForm #lastname').val('');
+        }
+
+        setTimeout(function () {
+          //document.getElementById("dailyDiscountRedeemedForm").reset();
+          $('#dailyDiscountRedeemedForm #response').hide();
+          $('#dailyDiscountRedeemedForm #alert').hide();
+          $('#dailyDiscountRedeemedForm #alert').addClass('d-none');
+          $('#dailyDiscountRedeemedForm #alert').removeClass('alert-success');
+          $('#dailyDiscountRedeemedForm #alert').removeClass('alert-danger');
+        }, 3000);
+      }
+    });
+  });
   jQuery.validator.addMethod("emailCustom", function (value, element, params) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(value);
@@ -203,15 +238,15 @@ $(document).ready(function () {
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-      }); // console.log('Form Start');
-
+      });
       $('#dailyDiscountRedeemedForm #saveForm').html('Sending..');
       $.ajax({
         url: $('#dailyDiscountRedeemedForm #discountUrl').text(),
         type: "POST",
         data: $('#dailyDiscountRedeemedForm').serialize(),
         success: function success(response) {
-          console.log(response);
+          // console.log(response);
+          //document.getElementById("dailyDiscountRedeemedForm").reset();
           $('#dailyDiscountRedeemedForm #saveForm').html('Save');
           $('#dailyDiscountRedeemedForm #response').show();
           $('#dailyDiscountRedeemedForm #alert').show();
@@ -237,10 +272,12 @@ $(document).ready(function () {
           }
 
           setTimeout(function () {
-            document.getElementById("dailyDiscountRedeemedForm").reset();
+            //document.getElementById("dailyDiscountRedeemedForm").reset();
             $('#dailyDiscountRedeemedForm #response').hide();
             $('#dailyDiscountRedeemedForm #alert').hide();
             $('#dailyDiscountRedeemedForm #alert').addClass('d-none');
+            $('#dailyDiscountRedeemedForm #alert').removeClass('alert-success');
+            $('#dailyDiscountRedeemedForm #alert').removeClass('alert-danger');
           }, 5000);
         }
       });
@@ -248,14 +285,16 @@ $(document).ready(function () {
   });
   $("#customerRecordInquiryForm").validate({
     rules: {
-      type: "required",
+      type: {
+        required: false
+      },
       discount: {
-        required: true,
+        required: false,
         digits: true
       }
     },
     messages: {
-      type: "Please enter a type first",
+      // type: "Please enter a type first",
       discount: "Please enter customer Discount ID"
     },
     submitHandler: function submitHandler(form) {
@@ -263,8 +302,7 @@ $(document).ready(function () {
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-      });
-      console.log('Form Start'); // Search Start //
+      }); // Search Start //
 
       $('#search').click(function (e) {
         e.preventDefault();
@@ -274,7 +312,7 @@ $(document).ready(function () {
           type: "POST",
           data: $('#customerRecordInquiryForm').serialize() + '&button_type=search',
           success: function success(response) {
-            console.log(response);
+            // console.log(response);
             $('#customerRecordInquiryForm #search').html('Search');
             $('#customerRecordInquiryForm #response').show();
             $('#customerRecordInquiryForm #alert').show();
@@ -294,12 +332,13 @@ $(document).ready(function () {
             $('#customerRecordInquiryForm #alert').removeClass('d-none');
 
             if (response.status === true) {
-              //$('#customerRecordInquiryForm #alert').addClass('alert-success');
-              console.log(response.data.member_data);
+              $('#customerRecordInquiryForm #alert').addClass('alert-success'); // console.log(response.data.member_data);
+
               $('#firstName').val(response.data.member_data.first_name);
               $('#lastName').val(response.data.member_data.last_name);
               $('#emailAddress').val(response.data.member_data.email);
               $('#memeberId').val(response.data.member_data.id);
+              $('#type').val(response.data.membership_type);
             } else {
               $('#customerRecordInquiryForm #alert').addClass('alert-danger');
               document.getElementById("customerRecordInquiryForm").reset();
@@ -309,6 +348,8 @@ $(document).ready(function () {
               $('#customerRecordInquiryForm #response').hide();
               $('#customerRecordInquiryForm #alert').hide();
               $('#customerRecordInquiryForm #alert').addClass('d-none');
+              $('#customerRecordInquiryForm #alert').removeClass('alert-success');
+              $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
             }, 5000);
             setTimeout(function () {
               document.getElementById("customerRecordInquiryForm").reset();
@@ -358,6 +399,8 @@ $(document).ready(function () {
               $('#customerRecordInquiryForm #response').hide();
               $('#customerRecordInquiryForm #alert').hide();
               $('#customerRecordInquiryForm #alert').addClass('d-none');
+              $('#customerRecordInquiryForm #alert').removeClass('alert-success');
+              $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
             }, 5000);
           }
         });
@@ -379,7 +422,7 @@ $(document).ready(function () {
             type: "POST",
             data: $('#customerRecordInquiryForm').serialize() + '&button_type=delete',
             success: function success(response) {
-              console.log(response);
+              // console.log(response);
               $('#customerRecordInquiryForm #delete').html('Delete');
 
               if (response.status === true) {
@@ -415,6 +458,8 @@ $(document).ready(function () {
                   $('#customerRecordInquiryForm #response').hide();
                   $('#customerRecordInquiryForm #alert').hide();
                   $('#customerRecordInquiryForm #alert').addClass('d-none');
+                  $('#customerRecordInquiryForm #alert').removeClass('alert-success');
+                  $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
                 }, 5000);
               }
             }

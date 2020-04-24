@@ -47,16 +47,20 @@
 
 <body>
     <div style="width: 890px; margin:0 auto;">
-        <p>Dear First Name Last Name,</p>
+        <p>Dear {{ $data['first_name'] }} {{ $data['last_name'] }},</p>
         <p>Welcome to the Burlington Springs personalized Daily Discounts Program. We are pleased to offer you reduced golf rates for your ongoing loyalty via our traditional printed paper vouchers OR via a JPEG picture you can store on your mobile phone.</p>
         <p>Your name and an assigned Discount Number xxxx (associated with your email address) are printed on the attached personalized vouchers which are required for each golfer who plays.</p>
         <p>For your convenience, when you arrive at the course: </p>
         <ol>
             <li>
+                <p>
             you can provide one paper voucher from the 8 images (perhaps it will only be 6) displayed on a single page (feel free to save this file for future printing), OR
+            </p>
             </li>
             <li>
+                <p>
             you can save the JPEG picture file on your mobile phone to show to our pro shop staff who will record the details
+            </p>
             </li>
         </ol>
         <p>Discount conditions are contained on the vouchers and on our website.  If you require any clarification, please ask our pro shop staff.</p>

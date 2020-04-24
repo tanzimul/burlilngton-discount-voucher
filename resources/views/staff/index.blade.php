@@ -29,16 +29,10 @@
                                     <div class="col-md-2">
                                         <label for="phone">Phone</label>
                                         <input type="checkbox" class="form-check-input" name="phone" id="phone">
-
-                                        <!-- <div class="custom-control custom-checkbox">
-                                            <label class="col-form-label custom-control-label" for="phone">Phone</label>
-                                            <input type="checkbox" class="custom-control-input" id="phone" name="phone">
-                                        </div> -->
-
                                     </div>
                                     <div class="col-md-4">
                                         <label for="lastname">Last Name</label>
-                                        <input type="text" class="form-control" name="lastname" id="lastname" required>
+                                        <input type="text" class="form-control" name="lastname" id="lastname" required readonly>
                                     </div>
                                 </div>
                             </div>
@@ -48,6 +42,7 @@
                             <div class="col">
                                 <div class="text-center">
                                     <div class="d-none" id="discountUrl">{{ route('staff.redeem.discount') }}</div>
+                                    <div class="d-none" id="discountUserSearchUrl">{{ route('staff.user.discount') }}</div>
                                     <button type="submit" id="saveForm" class="btn btn-success">Save</button>
                                 </div>
                                 <div class="mt-4 alert d-none" id="alert">
@@ -77,13 +72,13 @@
                                 <label for="discount">Discount #</label>
                                 <input type="number" class="form-control" name="discount" required>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <label for="type">Type *</label>
-                                <input type="text" class="form-control" name="type" required>
+                                <input type="text" class="form-control" name="type" id="type">
                             </div>
-                            <div class="col-md-1">
+                            <!-- <div class="col-md-1">
 
-                            </div>
+                            </div> -->
                             <div class="col-md-8">
                                 <div class="form-row">
                                     <div class="col-md-4">

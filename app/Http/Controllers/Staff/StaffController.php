@@ -153,7 +153,7 @@ class StaffController extends Controller
             ]);
     
             if (!($validator->fails())) {
-                if(empty($request['member_id'])){
+                if(!empty($request['member_id'])){
                     $memberUpdateData = Member::find($request['member_id'])
                     ->update([
                         'first_name' => $request['first_name'],
@@ -195,38 +195,59 @@ class StaffController extends Controller
         // Search Start//
 
         if ($request['button_type'] == 'search') {
+
+            
+
             $validator = Validator::make($request->all(), [
-                'type' => ['required', 'string', 'min:1', 'max:1'],
+                // 'type' => ['required', 'string', 'min:1', 'max:1'],
                 'discount' => ['required', 'numeric', 'digits_between:2,4'],
             ]);
     
             if (!($validator->fails())) {
-                $membership_type = '';
+                // $membership_type = '';
 
-                if ($request['type'] == 'r' || $request['type'] == 'R') {
-                    $membership_type = 'Regular';
-                } else if ($request['type'] == 's' || $request['type'] == 'S') {
-                    $membership_type = 'Senior';
-                } else if ($request['type'] == 'f' || $request['type'] == 'F') {
-                    $membership_type = 'Flyer';
-                } else {
-                    return response()->json([
-                        'message' => 'Please enter a valid customer type',
-                        'status' => false,
-                        'data' => null
-                    ], 200);
+                // if ($request['type'] == 'r' || $request['type'] == 'R') {
+                //     $membership_type = 'Regular';
+                // } else if ($request['type'] == 's' || $request['type'] == 'S') {
+                //     $membership_type = 'Senior';
+                // } else if ($request['type'] == 'f' || $request['type'] == 'F') {
+                //     $membership_type = 'Flyer';
+                // } else {
+                //     return response()->json([
+                //         'message' => 'Please enter a valid customer type',
+                //         'status' => false,
+                //         'data' => null
+                //     ], 200);
+                // }
+
+                //dd($request->all());
+                $memberSearchByDiscountID = null;
+                if($request['discount'] != null){
+                    $memberSearchByDiscountID = DiscountProgram::where('discount_id',$request['discount'])
+                        ->with('memberData')
+                        ->first();
                 }
-
-                $memberSearchByDiscountID = DiscountProgram::where([
-                    'discount_id'       =>  $request['discount'],
-                    'membership_type'   =>  $membership_type
-                ])
-                    ->with('memberData')
-                    ->first();
+                // else if($request['first_name']){
+                //     $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) 
+                //         {
+                //             $q->where('first_name', $request['first_name']);
+                //         }
+                //     ])->first();
+                // }else if($request['last_name']){
+                //     $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) 
+                //         {
+                //             $q->where('last_name', $request['last_name']);
+                //         }
+                //     ])->first();
+                // }
+                // else if($request['email']){
+                //     $memberSearchByDiscountID = Member::where('email',$request['email'])->with('discountList')->first();
+                //     dd($memberSearchByDiscountID);
+                // }
 
                 if ($memberSearchByDiscountID != null) {
                     return response()->json([
-                        'message' => 'Success',
+                        'message' => 'User found',
                         'status' => true,
                         'data' => $memberSearchByDiscountID
                     ], 200);
@@ -293,5 +314,37 @@ class StaffController extends Controller
 
 
         // Delete End //
+    }
+
+
+    public function searchUser(Request $request)
+    {
+        //dd($request->all());
+        $memberSearchByDiscountID = DiscountProgram::where('discount_id',$request['discount'])
+            ->with('memberData')
+            ->first();
+        if($memberSearchByDiscountID != null){
+            $lastName = $memberSearchByDiscountID->memberData->last_name;
+            if($lastName != null){
+                return response()->json([
+                    'message' => 'User Found',
+                    'status' => true,
+                    'data' => $lastName
+                ], 200);
+            }else{
+                return response()->json([
+                    'message' => 'No user found with this discount',
+                    'status' => false,
+                    'data' => null
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                'message' => 'No user found with this discount',
+                'status' => false,
+                'data' => null
+            ], 200);
+        }
+        
     }
 }

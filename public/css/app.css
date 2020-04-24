@@ -1,28 +1,28 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);html {
+html {
   scroll-behavior: smooth;
-  font-family: "Nunito", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 body {
   font-family: inherit;
 }
 
+a,
+div,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-p,
-a,
-div,
 input,
-select,
-option,
-ul,
+label,
 li,
-label {
-  font-family: "Nunito", sans-serif;
+option,
+p,
+select,
+ul {
+  font-family: inherit;
 }
 
 section {
@@ -38,13 +38,13 @@ section {
   }
 }
 
-.custom-control-label::before,
-.custom-control-label::after {
+.custom-control-label:after,
+.custom-control-label:before {
   top: 40%;
 }
 
 .package__block--footer {
-  margin: 30px auto 0 auto;
+  margin: 30px auto 0;
 }
 
 .package__block--footer p {
@@ -70,13 +70,41 @@ section {
   }
 }
 
-.input-group > .form-control:not(:last-child),
-.input-group > .custom-select:not(:last-child) {
+.input-group > .custom-select:not(:last-child),
+.input-group > .form-control:not(:last-child) {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
 
 .input-group-append {
   display: none;
+}
+
+/* Navbar */
+
+.navbar.navbar-expand-md.navbar-light.bg-white {
+  background-color: #000 !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #fff !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #28a745 !important;
+}
+
+.navbar-nav .dropdown-menu,
+.dropdown-item.nav-link {
+  background-color: #000 !important;
+}
+
+/* Footer */
+
+footer {
+  background-color: #000;
+  color: #fff;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
