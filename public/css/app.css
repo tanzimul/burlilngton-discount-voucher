@@ -25,16 +25,17 @@ ul {
   font-family: inherit;
 }
 
-section {
-  height: 100vh;
-  width: 60%;
-  margin: 0 auto;
+.package__block--form,
+.discount__block--form,
+.reprint__block--form {
+  width: 80%;
 }
 
 @media (max-width: 992px) {
-  section {
-    width: 100%;
-    margin: 0 auto;
+  .package__block--form,
+  .discount__block--form,
+  .reprint__block--form {
+    width: 90%;
   }
 }
 
@@ -97,6 +98,10 @@ section {
 .navbar-nav .dropdown-menu,
 .dropdown-item.nav-link {
   background-color: #000 !important;
+}
+
+.navbar-toggler {
+  background-color: #fff;
 }
 
 /* Footer */
