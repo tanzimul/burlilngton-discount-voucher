@@ -17,13 +17,13 @@ class Staff
     public function handle($request, Closure $next)
     {
         if (Auth::user()) {
-            if (Auth::user()->role == 1) {
-                return redirect()->route('admin');
-            }
+            // if (Auth::user()->role == 1) {
+            //     return redirect()->route('admin');
+            // }
 
-            if (Auth::user()->role == 2) {
+            // if (Auth::user()->role == 2) {
                 return $next($request);
-            }
+            // }
         } else {
             return redirect()->route('main');
         }
