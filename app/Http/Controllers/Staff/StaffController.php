@@ -22,7 +22,7 @@ class StaffController extends Controller
             'discount' => ['required', 'numeric', 'digits_between:2,4'],
             'lastname' => ['required', 'string'],
         ]);
-
+        
         if (!($validator->fails())) {
 
             $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
