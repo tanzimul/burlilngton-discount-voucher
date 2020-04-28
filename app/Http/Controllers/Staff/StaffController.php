@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminDiscountProgram;
 use App\Models\DiscountProgram;
 use App\Models\Member;
 use Illuminate\Http\Request;
@@ -10,82 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class StaffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view('staff.index');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     public function submitDiscount(Request $request)
     {
@@ -98,9 +27,7 @@ class StaffController extends Controller
 
             $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
                 $q->where('last_name', $request['lastname']);
-            }])
-                ->where('discount_id', $request['discount'])
-                ->first();
+            }])->where('discount_id', $request['discount'])->first();
 
             if ($memberSearchByDiscountID != null) {
                 if ($memberSearchByDiscountID->memberData != null) {
@@ -110,6 +37,12 @@ class StaffController extends Controller
                         $memberSearchByDiscountID->device = "phone";
                     }
                     $memberSearchByDiscountID->save();
+
+                    $adminDiscount = AdminDiscountProgram::create([
+                        'discount_id' => $request['discount'],
+                        'last_used_at' => $request['date'],
+                    ]);
+
                     return response()->json([
                         'message' => 'Success',
                         'status' => true,
@@ -160,7 +93,6 @@ class StaffController extends Controller
                         'last_name' => $request['last_name'],
                         'email' => $request['email']
                     ]);
-                    //dd($memberUpdateData);
                     if ($memberUpdateData == true) {
                         return response()->json([
                             'message' => 'Customer data updated successfully',
@@ -188,7 +120,6 @@ class StaffController extends Controller
                     'data' => $validator->messages()
                 ], 200);
             }
-            
         }
 
 
@@ -196,54 +127,17 @@ class StaffController extends Controller
 
         if ($request['button_type'] == 'search') {
 
-            
-
             $validator = Validator::make($request->all(), [
-                // 'type' => ['required', 'string', 'min:1', 'max:1'],
                 'discount' => ['required', 'numeric', 'digits_between:2,4'],
             ]);
     
             if (!($validator->fails())) {
-                // $membership_type = '';
-
-                // if ($request['type'] == 'r' || $request['type'] == 'R') {
-                //     $membership_type = 'Regular';
-                // } else if ($request['type'] == 's' || $request['type'] == 'S') {
-                //     $membership_type = 'Senior';
-                // } else if ($request['type'] == 'f' || $request['type'] == 'F') {
-                //     $membership_type = 'Flyer';
-                // } else {
-                //     return response()->json([
-                //         'message' => 'Please enter a valid customer type',
-                //         'status' => false,
-                //         'data' => null
-                //     ], 200);
-                // }
-
-                //dd($request->all());
                 $memberSearchByDiscountID = null;
                 if($request['discount'] != null){
                     $memberSearchByDiscountID = DiscountProgram::where('discount_id',$request['discount'])
                         ->with('memberData')
                         ->first();
                 }
-                // else if($request['first_name']){
-                //     $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) 
-                //         {
-                //             $q->where('first_name', $request['first_name']);
-                //         }
-                //     ])->first();
-                // }else if($request['last_name']){
-                //     $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) 
-                //         {
-                //             $q->where('last_name', $request['last_name']);
-                //         }
-                //     ])->first();
-                // }
-                // else if($request['email']){
-                //     $memberSearchByDiscountID = Member::where('email',$request['email'])->with('discountList')->first();
-                //     dd($memberSearchByDiscountID);
-                // }
 
                 if ($memberSearchByDiscountID != null) {
                     return response()->json([
@@ -289,7 +183,7 @@ class StaffController extends Controller
 
                 if ($memberSearchByDiscountID != null) {
                     $deleteConfirm = $memberSearchByDiscountID->delete();
-                    //dd($deleteConfirm);
+                    
                     return response()->json([
                         'message' => 'Delete successfully',
                         'status' => true,
@@ -319,32 +213,45 @@ class StaffController extends Controller
 
     public function searchUser(Request $request)
     {
-        //dd($request->all());
         $memberSearchByDiscountID = DiscountProgram::where('discount_id',$request['discount'])
             ->with('memberData')
             ->first();
         if($memberSearchByDiscountID != null){
-            $lastName = $memberSearchByDiscountID->memberData->last_name;
-            if($lastName != null){
+            if($memberSearchByDiscountID->is_admin == true){
+                $lastName = $memberSearchByDiscountID->memberData->last_name;
                 return response()->json([
                     'message' => 'User Found',
                     'status' => true,
                     'data' => $lastName
                 ], 200);
-            }else{
+            } else if ($memberSearchByDiscountID->is_used == false){
+                if ($memberSearchByDiscountID->memberData != null) {
+                    $lastName = $memberSearchByDiscountID->memberData->last_name;
+                    return response()->json([
+                        'message' => 'User Found',
+                        'status' => true,
+                        'data' => $lastName
+                    ], 200);
+                }else{
+                    return response()->json([
+                        'message' => 'No user found with this discount',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                }
+            } else {
                 return response()->json([
-                    'message' => 'No user found with this discount',
+                    'message' => 'Sorry this Discount # has already been used.',
                     'status' => false,
                     'data' => null
                 ], 200);
             }
         }else{
             return response()->json([
-                'message' => 'No user found with this discount',
+                'message' => 'No discount found',
                 'status' => false,
                 'data' => null
             ], 200);
         }
-        
     }
 }

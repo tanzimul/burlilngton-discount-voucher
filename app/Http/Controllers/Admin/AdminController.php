@@ -66,46 +66,7 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function delete($id)
     {
         $user = User::find($id)->delete();
@@ -124,7 +85,6 @@ class AdminController extends Controller
 
     public function export(Request $request)
     {
-        //dd($request->all());
         $validator = Validator::make($request->all(), [
             'report' => ['required'],
             'from' => [Rule::requiredIf($request->report == 'redemption_transactions')],
@@ -141,7 +101,7 @@ class AdminController extends Controller
                 return Excel::download(new DailyReconciliationExport($request->date), 'Daily Reconciliation List.xlsx');
             }
         } else {
-            dd($validator->messages());
+            //dd($validator->messages());
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -151,26 +111,54 @@ class AdminController extends Controller
 
     public function pdfTest()
     {
-        $customers = Member::with('discountList')->get();
-        return view('pdfs.format3', compact('customers'));
-    }
+        // $customers = Member::with('discountList')->get();
+        // return view('pdfs.format5', compact('customers'));
 
-    public function pdfView()
-    {
-        //$data = $request->all();
-
-        // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
-        // $data['replyToName'] = env('MAIL_FROM_NAME');
-
-        $data['replyTo'] = 'quizstarmobile@gmail.com';
-        $data['replyToName'] = 'QuizKing';
-        $data['imageLogo'] = asset('images/BSG-Logo-2020.png');
-        $data['imageButton'] = asset('/images/discount-btn.png');
-
-        //dd($data);
         
-        $pdf = PDF::loadView('pdfs.format3', compact('data'));
-        return $pdf->download('test_'. rand() . '_lab.pdf');
+        $data['replyTo'] = 'quizstarmobile@gmail.com';
+        $data['replyToName'] = 'Burlington Springs Team';
+        $data['discountCodes'] = [
+            0 => 1199,
+            1 => 1200,
+            2 => 1201,
+            3 => 1202,
+            4 => 1203,
+            5 => 1204,
+            6 => 1205,
+            7 => 1206,
+        ];
+        $data['email'] = 'tanzimul.tanim@gmail.com';
+        $data['first_name'] = 'Tanzimul';
+        $data['last_name'] = 'Alam';
+        $data['package'] = 'senior';
+        $data['discountCode'] = 1109;
+
+        $pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
+            ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
+            ->setPaper('a4', 'potrait');
+
+        // $pdf = PDF::loadView('pdfs.single-' . $data['package'], compact('data'))
+        //     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
+        //     ->setPaper('a4', 'potrait');
+        return $pdf->download('lukuluku.pdf');
     }
+
+    // public function pdfView()
+    // {
+    //     //$data = $request->all();
+
+    //     // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+    //     // $data['replyToName'] = env('MAIL_FROM_NAME');
+
+    //     $data['replyTo'] = 'quizstarmobile@gmail.com';
+    //     $data['replyToName'] = 'QuizKing';
+    //     $data['imageLogo'] = asset('images/BSG-Logo-2020.png');
+    //     $data['imageButton'] = asset('/images/discount-btn.png');
+
+    //     //dd($data);
+        
+    //     $pdf = PDF::loadView('pdfs.format3', compact('data'));
+    //     return $pdf->download('test_'. rand() . '_lab.pdf');
+    // }
 
 }
