@@ -31,6 +31,7 @@ $(document).ready(function () {
                 if (response.status === true) {
                     $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
                     $('#dailyDiscountRedeemedForm #lastname').val(response.data);
+                    //document.getElementById("dailyDiscountRedeemedForm").reset();
                 } else {
                     $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
                     $('#dailyDiscountRedeemedForm #lastname').val('');
@@ -122,7 +123,10 @@ $(document).ready(function () {
 
     $("#reprintForm").validate({
         rules: {
-            discount: "required",
+            discount: {
+                required: true,
+                digits: true
+            },
             email: {
                 required: true,
                 email: true,
@@ -132,6 +136,31 @@ $(document).ready(function () {
         messages: {
             discount: "Please enter your Discount ID",
             email: "Please enter a valid email address",
+        }
+    });
+
+
+    $("#report2").click(function() {
+        $("#fromDate").prop("required", true);
+        $("#fromDate").focus();
+        $("#toDate").prop("required", true);
+    });
+    $("#report3").click(function() {
+        $("#dailyDate").prop("required", true);
+        $("#dailyDate").focus();
+    });
+
+
+
+
+    $("#exportReportForm").validate({
+        rules: {
+            report: {
+                required: true,
+            },
+        },
+        messages: {
+            report: "Select",
         }
     });
 
@@ -150,7 +179,7 @@ $(document).ready(function () {
         },
         messages: {
             date: "Please select a date first",
-            discount: "Please enter customer Discount ID",
+            discount: "Please enter Discount ID",
             phone: "Please check this if device is phone",
             lastname: "Please enter customer Last Name"
         },
@@ -188,6 +217,7 @@ $(document).ready(function () {
                     $('#dailyDiscountRedeemedForm #alert').removeClass('d-none');
                     if (response.status === true) {
                         $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
+                        document.getElementById("dailyDiscountRedeemedForm").reset();
                     } else {
                         $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
                     }
