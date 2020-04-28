@@ -6,13 +6,13 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Reports</div>
-                <form action="{{ route('export') }}" method="post">
+                <form action="{{ route('export') }}" method="post" id="exportReportForm">
                     @csrf
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="custom-control custom-radio pt-2">
-                                    <input type="radio" class="custom-control-input" id="report1" name="report" value="customer_record" required>
+                                    <input type="radio" class="custom-control-input" id="report1" name="report" value="customer_record" required checked>
                                     <label class="custom-control-label border rounded w-100 p-4" for="report1">Customer Records</label>
                                 </div>
                             </div>
@@ -52,6 +52,27 @@
                         </div>
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-success">Export</button>
+                        </div>
+                        <div class="mt-4">
+                            @if ($errors->any())
+                            <div class="alert alert-danger" id="alertMessage">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            @if(session('success'))
+                            <div class="alert alert-success" id="alertMessage">
+                                {{ session('success') }}
+                            </div>
+                            @endif
+                            @if(session('error'))
+                            <div class="alert alert-danger" id="alertMessage">
+                                {{ session('error') }}
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </form>

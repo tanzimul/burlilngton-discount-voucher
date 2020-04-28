@@ -41,5 +41,16 @@ Route::post('/submit-record', 'Staff\StaffController@submitRecord')->name('staff
 Route::get('/search-user', 'Staff\StaffController@searchUser')->name('staff.user.discount');
 
 
-Route::get('/pdfTest', 'Admin\AdminController@pdfTest');
-Route::get('/pdfView', 'Admin\AdminController@pdfView');
+Route::get('/generate', 'Admin\AdminController@pdfTest');
+// Route::get('/pdfView', 'Admin\AdminController@pdfView');
+
+Route::get('/all-clear', function() {
+    Artisan::call('key:generate');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    // Artisan::call('optimize:clear');
+    Artisan::call('migrate:refresh --seed');
+    return "All cleared";
+});

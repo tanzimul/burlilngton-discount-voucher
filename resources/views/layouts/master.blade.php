@@ -39,7 +39,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('images/BSG-Logo-2020.png') }}" class="img-fluid" style="max-width: 130px;" alt="{{ config('app.name', 'Laravel') }}"/>
+                    <img src="{{ asset('images/logo.png') }}" class="img-fluid" style="max-width: 230px;" alt="{{ config('app.name', 'Laravel') }}"/>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -60,17 +60,18 @@
                         @guest
                         @if (Route::has('login'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Staff Login') }}</a>
                         </li>
                         @endif
                         @endguest
 
                         @auth
                         @if(Auth::user()->role == 1)
-                        <li class="nav-item"><a class="nav-link" href="{{ route('report') }}">Report</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('user.management') }}">User Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('report') }}">Reports</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('user.management') }}">User Admin</a></li>
                         @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ route('staff.show') }}"> Daily Discount & Customer Record </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('main') }}"> Program Enrollment </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('staff.show') }}"> Redemptions/Edit </a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <svg class="bi bi-people-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +114,7 @@
         <p class="text-center">
             Burlington Springs Golf and Country Club | Pro Shop: 905-335-2922 | Toll Free: 1-888-565-7355<br />
             <p class="text-center">Copyright © 2020 Burlington Springs Golf and Country Club. All Rights Reserved.<br />
-                <img src="{{ asset('images/BSG-Logo-2020.png') }}" class="img-fluid" style="max-width: 130px;" alt="{{ config('app.name', 'Laravel') }}"/>
+                <img src="{{ asset('images/logo.png') }}" class="img-fluid mt-3" style="max-width: 230px;" alt="{{ config('app.name', 'Laravel') }}"/>
             </p>
     </footer>
     <!-- /Footer Section -->

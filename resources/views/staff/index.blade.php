@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="type">Type *</label>
-                                <input type="text" class="form-control" name="type" id="type">
+                                <input type="text" class="form-control" name="type" id="type" readonly>
                             </div>
                             <!-- <div class="col-md-1">
 

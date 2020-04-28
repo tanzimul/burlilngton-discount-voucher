@@ -7,7 +7,7 @@
     <section id="package">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8 mb-5">
+                <!-- <div class="col-md-8 mb-5">
                     @if ($errors->any())
                     <div class="alert alert-danger" id="alertMessage">
                         <ul>
@@ -27,13 +27,13 @@
                         {{ session('error') }}
                     </div>
                     @endif
-                </div>
+                </div> -->
                 <div class="col-md-8">
                     <div class="package__block">
-                        <h1 class="text-center">Burlington Springs Golf and Country Club</h1>
+                        <h1 class="text-center">Daily Discount Program Enrollment</h1>
                         <div class="mx-auto package__block--form">
                             <div class="custom-control custom-radio pt-2">
-                                <input type="radio" class="custom-control-input" id="package1" name="package" value="regular" required>
+                                <input type="radio" class="custom-control-input" id="package1" name="package" value="regular" required checked>
                                 <label class="custom-control-label border border-secondary rounded w-100 p-4" for="package1">
                                     Save $5 Weekdays (open til 3PM) <br />
                                     Save $10 Weekends & Holidays (7am to 3pm)
@@ -59,9 +59,78 @@
                             </div>
                             @endauth
 
-                            <div class="text-center mt-4">
+                            <!-- <div class="text-center mt-4">
                                 <a class="btn btn-success w-25 text-white" href="#discount">Go</a>
+                            </div> -->
+
+
+                            <!-- <div class="discount__block--form mx-auto mt-5"> -->
+                            <div class="mt-5">
+                                <div class="form-group row">
+                                    <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="firstName" name="first_name" required >
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="lastName" name="last_name" required >
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="email" class="col-sm-4 col-form-label">Email Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="email" name="email" required >
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required >
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news">
+                                    <label class="col-form-label custom-control-label p-4" for="newsletter">
+                                        Please add me to your list so I can receive news, special events info and promotional offers (required for all discounts)
+                                    </label>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <input class="btn btn-success" type="submit" value="Submit">
+                                </div>
+
+                                <div class="my-4">
+                                    @if ($errors->any())
+                                    <div class="alert alert-danger" id="alertMessage">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @endif
+                                    @if(session('success'))
+                                    <div class="alert alert-success" id="alertMessage">
+                                        {{ session('success') }}
+                                    </div>
+                                    @endif
+                                    @if(session('error'))
+                                    <div class="alert alert-danger" id="alertMessage">
+                                        {{ session('error') }}
+                                    </div>
+                                    @endif
+                                </div>
                             </div>
+                            <div class="mt-4">
+                                <div class="text-center">
+                                    <a class="btn btn-success" href="https://www.burlingtonsprings.com/" target="_blank">Return to Home page</a>
+                                </div>
+                            </div>
+
+
+
+
                         </div>
                         <div class="package__block--footer">
                             <p>- Valid May 11th to Oct 12th, 2020</p>
@@ -77,7 +146,7 @@
     <!-- /Package Selection -->
 
     <!-- Discount Enrollment -->
-    <section id="discount" class="mt-5 pt-5">
+    <!-- <section id="discount" class="mt-5 pt-5">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -88,25 +157,25 @@
                             <div class="form-group row">
                                 <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    <input type="text" class="form-control" id="firstName" name="first_name" required value="Tanzim">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    <input type="text" class="form-control" id="lastName" name="last_name" required value="Tanim">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="email" name="email" required>
+                                    <input type="text" class="form-control" id="email" name="email" required value="tanzimul.tanim@gmail.com">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required>
+                                    <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required value="tanzimul.tanim@gmail.com">
                                 </div>
                             </div>
                             <div class="custom-control custom-checkbox">
@@ -128,7 +197,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- /Discount Enrollment -->
 </form>
 @endsection

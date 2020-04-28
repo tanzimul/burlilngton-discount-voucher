@@ -14,7 +14,7 @@
                             <div class="form-group row">
                                 <label for="discount" class="col-sm-3 col-form-label">Discount #</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="discount" name="discount" required>
+                                    <input type="number" class="form-control" id="discount" name="discount" required>
                                 </div>
                             </div>
                             <div class="form-group row">
