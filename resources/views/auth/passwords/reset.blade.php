@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('password.update') }}" id="passwordResetForm">
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">
@@ -38,6 +38,21 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="alert alert-dark">
+                                    <p>The password and confirm password field must have at least three of the following five categories:</p>
+                                    <ul>
+                                        <li>English uppercase characters (A – Z)</li>
+                                        <li>English lowercase characters (a – z)</li>
+                                        <li>Base 10 digits (0 – 9)</li>
+                                        <li>Non-alphanumeric (For example: !, $, #, or %)</li>
+                                        <li>Unicode characters</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
 

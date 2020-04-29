@@ -113,3 +113,15 @@ footer {
 	padding-top: 30px;
 	padding-bottom: 30px;
 }
+
+
+/* Chrome, Safari, Edge, Opera */
+#discount::-webkit-outer-spin-button,
+#discount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+#discount {
+  -moz-appearance: textfield;
+}

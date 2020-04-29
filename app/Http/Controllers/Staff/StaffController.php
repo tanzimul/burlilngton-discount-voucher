@@ -20,41 +20,41 @@ class StaffController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'discount' => ['required', 'numeric', 'digits_between:2,4'],
-            'lastname' => ['required', 'string'],
+            // 'lastname' => ['required', 'string'],
         ]);
         
         if (!($validator->fails())) {
 
-            $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
-                $q->where('last_name', $request['lastname']);
-            }])->where('discount_id', $request['discount'])->first();
+            // $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
+            //     $q->where('last_name', $request['lastname']);
+            // }])->where('discount_id', $request['discount'])->first();
+
+            //$memberSearchByLastName = Member::where('last_name', $request['lastname'])->first();
+            
+            $memberSearchByDiscountID = DiscountProgram::where('discount_id', $request['discount'])->first();
 
             if ($memberSearchByDiscountID != null) {
-                if ($memberSearchByDiscountID->memberData != null) {
-                    $memberSearchByDiscountID->is_used = true;
-                    $memberSearchByDiscountID->used_at = $request['date'];
-                    if ($request->has('phone')) {
-                        $memberSearchByDiscountID->device = "phone";
-                    }
-                    $memberSearchByDiscountID->save();
 
-                    $adminDiscount = AdminDiscountProgram::create([
-                        'discount_id' => $request['discount'],
-                        'last_used_at' => $request['date'],
-                    ]);
-
-                    return response()->json([
-                        'message' => 'Success',
-                        'status' => true,
-                        'data' => $memberSearchByDiscountID
-                    ], 200);
-                } else {
-                    return response()->json([
-                        'message' => 'Did not find any match',
-                        'status' => false,
-                        'data' => null
-                    ], 200);
+                /** main content **/
+                $memberSearchByDiscountID->is_used = true;
+                $memberSearchByDiscountID->used_at = $request['date'];
+                if ($request->has('phone')) {
+                    $memberSearchByDiscountID->device = "phone";
                 }
+                $memberSearchByDiscountID->save();
+
+                $adminDiscount = AdminDiscountProgram::create([
+                    'discount_id' => $request['discount'],
+                    'last_used_at' => $request['date'],
+                ]);
+
+                return response()->json([
+                    'message' => 'Success',
+                    'status' => true,
+                    'data' => $memberSearchByDiscountID
+                ], 200);
+
+                /** main content **/
             } else {
                 return response()->json([
                     'message' => 'Did not find any match',
@@ -62,6 +62,10 @@ class StaffController extends Controller
                     'data' => null
                 ], 200);
             }
+
+
+
+
         } else {
             return response()->json([
                 'message' => 'Validation error',

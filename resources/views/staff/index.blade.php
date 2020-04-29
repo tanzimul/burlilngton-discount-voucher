@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header text-center">
-                    <h2>Daily Discount Redeemed</h2>
+                    <h2>Daily Discount Redemptions</h2>
                 </div>
 
                 <div class="card-body">
@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label for="dateused">Date of use</label>
-                                        <input type="text" class="form-control" name="date" id="dateused" value="{{ date('Y-m-d') }}" required>
+                                        <input type="text" class="form-control" name="date" id="dateused" required>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="discount">Discount #</label>
@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="lastname">Last Name</label>
-                                        <input type="text" class="form-control" name="lastname" id="lastname" required readonly>
+                                        <input type="text" class="form-control" name="lastname" id="lastname" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                         <div class="row form-row">
                             <div class="col-md-2">
                                 <label for="discount">Discount #</label>
-                                <input type="number" class="form-control" name="discount" required>
+                                <input type="number" class="form-control" name="discount" id="discount" required>
                             </div>
                             <div class="col-md-2">
                                 <label for="type">Type *</label>

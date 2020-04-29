@@ -91,7 +91,7 @@
                                     </div>
                                 </div>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news">
+                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news" checked>
                                     <label class="col-form-label custom-control-label p-4" for="newsletter">
                                         Please add me to your list so I can receive news, special events info and promotional offers (required for all discounts)
                                     </label>
@@ -135,8 +135,7 @@
                         <div class="package__block--footer">
                             <p>- Valid May 11th to Oct 12th, 2020</p>
                             <p>- Cannot be used with Tournament play or combined with other offers</p>
-                            <p>- <strong>To qualify for these discounts each player must provide either a paper Daily Discount Voucher or
-                                    a Daily Discount Voucher stored on your phone that contains your Discount# and name.</strong></p>
+                            <p>- <strong>To qualify for these discounts each player must present their personalized Daily Discount Voucher on their phone or paper.</strong></p>
                         </div>
                     </div>
                 </div>

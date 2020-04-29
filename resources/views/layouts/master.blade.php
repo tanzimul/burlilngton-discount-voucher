@@ -53,9 +53,8 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('reprint') }}">{{ __('Reprint Voucher') }}</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('reprint') }}">{{ __('Reprint Voucher') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('main') }}">{{ __('Program Enrollment') }}</a></li>
                         <!-- Authentication Links -->
                         @guest
                         @if (Route::has('login'))
@@ -67,11 +66,11 @@
 
                         @auth
                         @if(Auth::user()->role == 1)
-                        <li class="nav-item"><a class="nav-link" href="{{ route('report') }}">Reports</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('user.management') }}">User Admin</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('report') }}">{{ __('Reports') }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('user.management') }}">{{ __('User Admin') }}</a></li>
                         @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ route('main') }}"> Program Enrollment </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('staff.show') }}"> Redemptions/Edit </a></li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="{{ route('staff.show') }}">{{ __('Redemptions/Edit') }}</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <svg class="bi bi-people-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

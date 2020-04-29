@@ -59,8 +59,14 @@ $(document).ready(function () {
 
     $("#memberSignupForm").validate({
         rules: {
-            first_name: "required",
-            last_name: "required",
+            first_name: {
+                required: true,
+                minlength: 2
+            },
+            last_name: {
+                required: true,
+                minlength: 2
+            },
             package: "required",
             email: {
                 required: true,
@@ -73,8 +79,14 @@ $(document).ready(function () {
             },
         },
         messages: {
-            first_name: "Please enter your first name",
-            last_name: "Please enter your last name",
+            first_name: {
+                required: "Please enter your first name",
+                minlength: "Length at least two character long",
+            },
+            last_name: {
+                required: "Please enter your last name",
+                minlength: "Length at least two character long",
+            },
             package: "Please select a package first",
             email: "Please enter a valid email address",
             confirm_email: {
@@ -85,6 +97,10 @@ $(document).ready(function () {
         }
     });
 
+    jQuery.validator.addMethod("passwordCustom", function (value, element, params) {
+        var re = /^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/;
+        return re.test(value);
+    }, "Please fullfill the password criteria.");
 
     $("#userCreateForm").validate({
         rules: {
@@ -96,12 +112,14 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 5
+                minlength: 5,
+                passwordCustom: true
             },
             confirm_password: {
                 required: true,
                 minlength: 5,
-                equalTo: "#password"
+                equalTo: "#password",
+                passwordCustom: true,
             },
             role: "required",
         },
@@ -118,6 +136,41 @@ $(document).ready(function () {
                 equalTo: "Please enter the same password as above"
             },
             role: "Please select a role"
+        }
+    });
+
+
+    
+    $("#passwordResetForm").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
+                emailCustom: true
+            },
+            password: {
+                required: true,
+                minlength: 5,
+                passwordCustom: true
+            },
+            confirm_password: {
+                required: true,
+                minlength: 5,
+                equalTo: "#password",
+                passwordCustom: true,
+            },
+        },
+        messages: {
+            email: "Please enter a valid email address",
+            password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long"
+            },
+            password_confirmation: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long",
+                equalTo: "Please enter the same password as above"
+            },
         }
     });
 
@@ -175,7 +228,9 @@ $(document).ready(function () {
             phone: {
                 required: false
             },
-            lastname: "required"
+            lastname: {
+                required: false
+            },
         },
         messages: {
             date: "Please select a date first",
@@ -451,9 +506,13 @@ $(document).ready(function () {
 
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
+    var getDateToday = new Date();
+    //var dateToday = String(getDateToday.getMonth() + 1).padStart(2, '0') + '/' + String(getDateToday.getDate()).padStart(2, '0') + '/' + getDateToday.getFullYear(); // mm/dd/yyyy format
+    var dateToday = getDateToday.getFullYear() + '-' +  String(getDateToday.getMonth() + 1).padStart(2, '0') + '-' + String(getDateToday.getDate()).padStart(2, '0') ;
     $('#dateused').datepicker({
         uiLibrary: 'bootstrap4',
         format: 'yyyy-mm-dd',
+        value: dateToday,
         disableDates: function (date) {
             const currentDate = new Date();
             return date < currentDate ? true : false;
