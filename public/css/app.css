@@ -1,1 +1,188 @@
-html{scroll-behavior:smooth;font-family:Montserrat,sans-serif}a,body,div,h1,h2,h3,h4,h5,h6,input,label,li,option,p,select,ul{font-family:inherit}.discount__block--form,.package__block--form,.reprint__block--form{width:80%}@media (max-width:992px){.discount__block--form,.package__block--form,.reprint__block--form{width:90%}}.custom-control-label:after,.custom-control-label:before{top:40%}.package__block--footer{margin:30px auto 0}.package__block--footer p{margin-bottom:0}.invalid-feedback{display:block}.error{color:red}#dailyDiscountRedeemedForm .form-check-input{margin-top:2.5rem}@media (max-width:767px){#dailyDiscountRedeemedForm .form-check-input{margin-top:.4rem;margin-left:1.5rem}}.input-group>.custom-select:not(:last-child),.input-group>.form-control:not(:last-child){border-top-right-radius:3px;border-bottom-right-radius:3px}.input-group-append{display:none}.navbar.navbar-expand-md.navbar-light.bg-white{background-color:#000!important}.navbar-light .navbar-nav .nav-link{color:#fff!important}.navbar-light .navbar-nav .nav-link:hover{color:#28a745!important}.dropdown-item.nav-link,.navbar-nav .dropdown-menu{background-color:#000!important}.navbar-toggler{background-color:#fff}footer{background-color:#000;color:#fff;padding-top:30px;padding-bottom:30px}#discount::-webkit-inner-spin-button,#discount::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}#discount{-moz-appearance:textfield}
+html {
+  scroll-behavior: smooth;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  font-family: inherit;
+}
+
+a,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+label,
+li,
+option,
+p,
+select,
+ul {
+  font-family: inherit;
+}
+
+.package__block--form,
+.discount__block--form,
+.reprint__block--form {
+  width: 80%;
+}
+
+@media (max-width: 992px) {
+  .package__block--form,
+  .discount__block--form,
+  .reprint__block--form {
+    width: 90%;
+  }
+}
+
+.custom-control-label:after,
+.custom-control-label:before {
+  top: 40%;
+}
+
+.package__block--footer {
+  margin: 30px auto 0;
+}
+
+.package__block--footer p {
+  margin-bottom: 0;
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+.error {
+  color: red;
+}
+
+#dailyDiscountRedeemedForm .form-check-input {
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 767px) {
+  #dailyDiscountRedeemedForm .form-check-input {
+    margin-top: 0.4rem;
+    margin-left: 1.5rem;
+  }
+}
+
+.input-group > .custom-select:not(:last-child),
+.input-group > .form-control:not(:last-child) {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.input-group-append {
+  display: none;
+}
+
+/* Navbar */
+
+.navbar.navbar-expand-md.navbar-light.bg-white {
+  background-color: #000 !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #fff !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #28a745 !important;
+}
+
+.navbar-nav .dropdown-menu,
+.dropdown-item.nav-link {
+  background-color: #000 !important;
+}
+
+.navbar-toggler {
+  background-color: #fff;
+}
+
+/* Footer */
+
+footer {
+  background-color: #000;
+  color: #fff;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+
+#discount::-webkit-outer-spin-button,
+#discount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+
+#discount {
+  -moz-appearance: textfield;
+}
+
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: #dddddd;
+  opacity: 0.6;
+}
+
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #0d0e0d;
+  -webkit-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

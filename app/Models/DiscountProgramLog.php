@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DiscountProgram extends Model
+class DiscountProgramLog extends Model
 {
-    protected $table = 'discount_programs';
+    protected $table = 'discount_program_logs';
     protected $primaryKey = 'id';
     public $timestamps = true;
 
@@ -16,8 +16,9 @@ class DiscountProgram extends Model
      * @var array
      */
     protected $fillable = [
-        'membership_id', 'membership_type', 'discount_id', 'device', 'print_count', 'is_used', 'is_admin', 'used_at'
+        'membership_id', 'discount_id', 'last_used_at'
     ];
+
 
     public function memberData()
     {

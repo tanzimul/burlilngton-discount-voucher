@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
-use App\Models\DiscountProgram;
 use App\Models\Member;
 use App\Models\NewLetter;
 use App\Rules\ConfirmEmail;
@@ -12,8 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade as PDF;
 use Mail;
 use env;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\VoucherEmailAttachmentRegular;
+use Illuminate\Validation\Rule;
 
 
 class MemberController extends Controller
@@ -33,36 +31,88 @@ class MemberController extends Controller
 
     public function reprintVoucher(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'discount' => ['required', 'numeric', 'digits_between:2,4'],
-            'email' => ['required', 'string', 'email'],
-        ]);
+        // dd($request->all());
+        if($request->has('discount') && $request['discount'] != null){
+            $validator = Validator::make($request->all(), [
+                'discount' => ['numeric', 'digits:4'],
+            ]);
+    
+            if (!($validator->fails())) {
+                $memberSearchByDiscountID = Member::where('discount_id', $request['discount'])->with('discountListLogs')->first();
+                if ($memberSearchByDiscountID != null) {
+                    
+                    $sendEmail = $this->resendEmailWithAttachment($memberSearchByDiscountID);
+                    $memberSearchByDiscountID->print_count = $memberSearchByDiscountID->print_count+1;
+                    $memberSearchByDiscountID->save();
+                    //return redirect()->back()->with('success', 'An email with your personalized Daily Discount Vouchers has been sent to you.');
+                    return response()->json([
+                        'message' => 'An email with your personalized Daily Discount Vouchers has been sent to you.',
+                        'status' => true,
+                        'data' => null
+                    ], 200);
 
-        if (!($validator->fails())) {
-            $memberSearchByDiscountID = DiscountProgram::with(['memberData' => function ($q) use ($request) {
-                    $q->where('email', $request['email']);
-                }])->where('discount_id', $request['discount'])->first();
-            if ($memberSearchByDiscountID != null) {
-                if ($memberSearchByDiscountID->memberData != null) {
-                    if ($memberSearchByDiscountID->is_used == false) {
-                        $printCount = $memberSearchByDiscountID->print_count;
-                        $memberSearchByDiscountID->update([
-                            'print_count' => $printCount + 1,
-                        ]);
-
-                        $sendEmail = $this->sendEmailWithAttachmentWhileReprintVoucher($request, $memberSearchByDiscountID);
-                        return redirect()->back()->with('success', 'An email with your personalized Daily Discount Vouchers has been sent to you.');
-                    } else {
-                        return redirect()->back()->with('error', 'Sorry this Discount # has already been used.');
-                    }
                 } else {
-                    return redirect()->back()->with('error', 'Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                    return response()->json([
+                        'message' => 'Discount # is not enrolled. Please go to the Daily Discount Program page to enroll.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                    //return redirect()->back()->with('error', 'Discount # is not enrolled. Please go to the Daily Discount Program page to enroll.');
                 }
             } else {
-                return redirect()->back()->with('error', 'Discount # or email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                return response()->json([
+                    'message' => 'Validation error',
+                    'status' => false,
+                    'data' => $validator->messages()
+                ], 200);
+                
+                //return redirect()->back()->withErrors($validator)->withInput();
             }
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+        } else if ($request->has('email') && $request['email'] != null){
+            $validator = Validator::make($request->all(), [
+                'email' => ['string', 'email', 'regex:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'],
+            ]);
+    
+            if (!($validator->fails())) {
+                $memberSearchByDiscountID = Member::where('email', $request['email'])->with('discountListLogs')->first();
+                if ($memberSearchByDiscountID != null) {
+                    
+                    $sendEmail = $this->resendEmailWithAttachment($memberSearchByDiscountID);
+                    if($sendEmail == 'email sent'){
+                        $memberSearchByDiscountID->print_count = $memberSearchByDiscountID->print_count+1;
+                        $memberSearchByDiscountID->save();
+                        return response()->json([
+                            'message' => 'An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
+                    }
+                    
+                    //return redirect()->back()->with('success', 'An email with your personalized Daily Discount Vouchers has been sent to you.');
+
+                } else {
+                    return response()->json([
+                        'message' => 'Email address is not enrolled. Please go to the Daily Discount Program page to enroll.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                    // return redirect()->back()->with('error', 'Email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
+                }
+                
+            } else {
+                return response()->json([
+                    'message' => 'Validation error',
+                    'status' => false,
+                    'data' => $validator->messages()
+                ], 200);
+                // return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
     }
 
@@ -73,103 +123,201 @@ class MemberController extends Controller
             'package' => ['required', 'string'],
             'first_name' => ['required', 'string', 'min:2', 'max:100'],
             'last_name' => ['required', 'string', 'min:2', 'max:100'],
-            'email' => ['required', 'string', 'email', 'max:100', 'unique:members'],
+            'email' => ['required', 'string', 'email', 'max:100', 'unique:members', 'regex:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'],
             'confirm_email' => ['required', new ConfirmEmail($request['email'])],
         ]);
 
         if (!($validator->fails())) {
-            $discountCodes = array();
+            $discountCode = null;
             if ($request['package'] == 'regular') {
 
-                $maxDiscountProgram = DiscountProgram::where('membership_type', 'regular')->where('discount_id','<',6999)->max('discount_id');
+                $maxDiscountProgram = Member::where('membership_type', 'regular')->where('discount_id','>',999)->where('discount_id','<',6999)->max('discount_id');
                 //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
-                    for ($i = 1000; $i <= 1007; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
+                    $discountCode = 1000;
+                    
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
+
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
+
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
                     }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
                 } else if ($maxDiscountProgram < 6999) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
+                    $discountCode = $maxDiscountProgram+1;
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
 
-                    for ($i = $maxDiscountProgram + 1; $i <= $maxDiscountProgram + 8 && $i < 6999; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
                     }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
                 } else {
-                    return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return response()->json([
+                        'message' => 'Sorry, our discount quota has been filled up. We cannot enroll your email.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'senior') {
 
-                $maxDiscountProgram = DiscountProgram::where('membership_type', 'senior')->where('discount_id','<',9998)->max('discount_id');
+                $maxDiscountProgram = Member::where('membership_type', 'senior')->where('discount_id','>',6999)->where('discount_id','<',9999)->max('discount_id');
                 //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
+                    $discountCode = 7000;
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
-                    for ($i = 7000; $i <= 7007; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
-                    }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
-                } else if ($maxDiscountProgram < 9998) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
 
-                    for ($i = $maxDiscountProgram + 1; $i <= $maxDiscountProgram + 8 && $i <= 9998; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
                     }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
+                } else if ($maxDiscountProgram < 9999) {
+                    $discountCode = $maxDiscountProgram+1;
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
+
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
+
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
+                    }
                 } else {
-                    return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return response()->json([
+                        'message' => 'Sorry, our discount quota has been filled up. We cannot enroll your email.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'flyer') {
 
-                $maxDiscountProgram = DiscountProgram::where('membership_type', 'flyer')->where('discount_id','<',999)->max('discount_id');
+                $maxDiscountProgram = Member::where('membership_type', 'flyer')->where('discount_id','>',99)->where('discount_id','<',999)->max('discount_id');
                 //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
+                    $discountCode = 100;
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
-                    for ($i = 100; $i <= 107; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
+
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
                     }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
                 } else if ($maxDiscountProgram < 999) {
-                    $member = $this->createMember($request);
-                    $newsLetter = $this->createNewsLetter($request, $member);
+                    $discountCode = $maxDiscountProgram+1;
+                    
+                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+                    if($sendEmail == 'email sent'){
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
-                    for ($i = $maxDiscountProgram + 1; $i <= $maxDiscountProgram + 8 && $i < 999; $i++) {
-                        $discountProgram = $this->createDiscountProgram($request, $member, $i);
-                        array_push($discountCodes, $i);
+                        return response()->json([
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'status' => true,
+                            'data' => null
+                        ], 200);
+
+                    } else {
+                        return response()->json([
+                            'message' => $sendEmail,
+                            'status' => false,
+                            'data' => null
+                        ], 200);
                     }
-                    $sendEmail = $this->sendEmailWithAttachment($request, $discountCodes);
                 } else {
-                    return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
+                    return response()->json([
+                        'message' => 'Sorry, our discount quota has been filled up. We cannot enroll your email.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             }
-            return redirect()->back()->with('success', 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
+            // return redirect()->back()->with('success', 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
         } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json([
+                'message' => 'Validation error',
+                'status' => false,
+                'data' => $validator->messages()
+            ], 200);
+            // return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
 
 
 
-    private function createMember($request)
+    private function createMember($request, $discountCode)
     {
         return Member::create([
             'first_name' => $request['first_name'],
             'last_name' => $request['last_name'],
             'email' => $request['email'],
+            'membership_type' => $request['package'],
+            'discount_id' => $discountCode,
+            'device' => 'paper',
+            'print_count' => 1,
+            'is_admin' => 0,
         ]);
     }
 
@@ -177,7 +325,7 @@ class MemberController extends Controller
     private function createNewsLetter($request, $member)
     {
         if ($request->has('newsletter')) {
-            if ($request['newsletter'] = 'news') {
+            if ($request['newsletter'] == 'news') {
                 return NewLetter::create([
                     'membership_id' => $member->id,
                     'email' => $member->email,
@@ -189,31 +337,16 @@ class MemberController extends Controller
     }
 
 
-    private function createDiscountProgram($request, $member, $i)
-    {
-        return DiscountProgram::create([
-            'membership_id' => $member->id,
-            'membership_type' => $request['package'],
-            'discount_id' => $i,
-            'device' => 'paper',
-            'print_count' => 1,
-            'is_used' => 0,
-            'is_admin' => 0,
-            'used_at' => NULL,
-        ]);
-    }
-
-
-    private function sendEmailWithAttachment($request, $discountCodes)
+    private function sendEmailWithAttachment($request, $discountCode)
     {
         $data = $request->all();
 
-        // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
-        // $data['replyToName'] = env('MAIL_FROM_NAME');
+        $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+        $data['replyToName'] = env('MAIL_FROM_NAME');
 
-        $data['replyTo'] = 'quizstarmobile@gmail.com';
-        $data['replyToName'] = 'Burlington Springs Team';
-        $data['discountCodes'] = $discountCodes;
+        // $data['replyTo'] = 'quizstarmobile@gmail.com';
+        // $data['replyToName'] = 'Burlington Springs Team';
+        $data['discountCode'] = $discountCode;
 
         $message = '';
         try {
@@ -252,6 +385,56 @@ class MemberController extends Controller
             //return redirect()->back()->with('success', 'Email sent successfully');
         }
     }
+
+    private function resendEmailWithAttachment($memberData)
+    {
+        //dd('from mail',$memberData);
+        $data['replyTo'] = 'quizstarmobile@gmail.com';
+        $data['replyToName'] = 'Burlington Springs Team';
+        $data['discountCode'] = $memberData->discount_id;
+        $data['email'] = $memberData->email;
+        $data['first_name'] = $memberData->first_name;
+        $data['last_name'] = $memberData->last_name;
+        $data['package'] = $memberData->membership_type;
+
+        $message = '';
+        try {
+            if ($data['package'] == 'regular' || $data['package'] == 'senior') {
+
+                $pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
+                    ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
+                    ->setPaper('a4', 'potrait');
+                //return $pdf->download('lukuluku.pdf');
+                Mail::send('mails.' . $data['package'], compact('data'), function ($message) use ($data, $pdf) {
+                    $message
+                        ->to($data['email'], $data['first_name'])
+                        ->replyTo($data['replyTo'], $data['replyToName'])
+                        ->subject('Burlington Springs Daily Discount Program')
+                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf');
+                });
+            } else {
+                Mail::send('mails.flyer', compact('data'), function ($message) use ($data) {
+                    $message
+                        ->to($data['email'], $data['first_name'])
+                        ->replyTo($data['replyTo'], $data['replyToName'])
+                        ->subject('Burlington Springs Daily Discount Program');
+                });
+            }
+
+            return $message = 'email sent';
+        } catch (JWTException $exception) {
+            return $message = 'email not sent' + $exception->getMessage();
+            //return redirect()->back()->with('error', $exception->getMessage());
+        }
+        if (Mail::failures()) {
+            return $message = 'email not sent mail failure';
+            //return redirect()->back()->with('error', 'Error sending mail');
+        } else {
+            return $message = 'email sent success';
+            //return redirect()->back()->with('success', 'Email sent successfully');
+        }
+    }
+
 
     private function sendEmailWithAttachmentWhileReprintVoucher($request, $memberData)
     {

@@ -48,7 +48,7 @@
     <div style="width: 768px; margin:0 auto;">
         <p>Dear {{ $data['first_name'] }} {{ $data['last_name'] }},</p>
         <p>Welcome to the Burlington Springs personalized Daily Discount Program. We are excited to offer you reduced golf rates for your ongoing loyalty!</p>
-        <p>Your enrolled Name and Daily Discount # @foreach ($data['discountCodes'] as $key => $code) {{ $code }} @if (!$loop->last), @endif @endforeach are printed on the attached personalized vouchers… and one is required for each golfer who wishes the discount.</p>
+        <p>Your enrolled Name and Daily Discount # {{ $data['discountCode'] }} are printed on the attached personalized vouchers… and one is required for each golfer who wishes the discount.</p>
         <p>In these challenging times we have also upgraded our program with reduced physical contact options that enhance everyone’s safety. You can use ONE of the following options that best suits you: </p>
         <ol>
             <li>

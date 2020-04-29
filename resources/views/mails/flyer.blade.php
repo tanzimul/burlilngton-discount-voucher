@@ -48,7 +48,7 @@
     <div style="width: 768px; margin:0 auto;">
         <p>Dear {{ $data['first_name'] }} {{ $data['last_name'] }},</p>
         <p>Welcome to the Burlington Springs personalized Frequent Flyer Program.  We are excited to offer you reduced golf rates for your ongoing loyalty!</p>
-        <p>We have assigned you Discount # @foreach ($data['discountCodes'] as $key => $code) {{ $code }} @if (!$loop->last), @endif @endforeach that will be required along with your Last Name by our Pro Shop team each time you play.  The number is associated with your email address and is not transferable to other golfers.</p>
+        <p>We have assigned you Discount # {{ $data['discountCode'] }} that will be required along with your Last Name by our Pro Shop team each time you play.  The number is associated with your email address and is not transferable to other golfers.</p>
         <p>Reduced rates are offered May 11th to Oct 12th, 2020 and cannot be used with Tournament play or combined with other offers.</p>
         <p>Thank you for patronage, we look forward to seeing you regularly at Burlington Springs and please let us know how we can improve your experience. Please retain this email for your records.</p>
         

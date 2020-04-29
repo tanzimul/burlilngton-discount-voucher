@@ -18,8 +18,9 @@ Route::post('/reprint-voucher', 'Member\MemberController@reprintVoucher')->name(
 
 
 //Auth::routes(['register' => false]);
-//Route::get('staff-login')->name('login')->uses('Auth\LoginController@showLoginForm');
+// Route::get('staff-login')->name('login')->uses('Auth\LoginController@showLoginForm');
 // Auth::routes();
+Route::redirect('/home', '/', 301);
 
 Auth::routes(['register' => false]);
 

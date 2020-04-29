@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdminDiscountProgram;
+use App\Models\PivotDiscountProgram;
 use App\Models\DiscountProgram;
 use App\Models\Member;
 use Illuminate\Http\Request;
@@ -43,7 +43,7 @@ class StaffController extends Controller
                 }
                 $memberSearchByDiscountID->save();
 
-                $adminDiscount = AdminDiscountProgram::create([
+                $pivotDiscount = PivotDiscountProgram::create([
                     'discount_id' => $request['discount'],
                     'last_used_at' => $request['date'],
                 ]);

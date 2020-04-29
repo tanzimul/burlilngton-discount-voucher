@@ -16,10 +16,10 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email'
+        'first_name', 'last_name', 'email', 'membership_type', 'discount_id', 'device', 'print_count', 'is_admin'
     ];
 
-    public function discountList (){
-        return $this->hasMany('App\Models\DiscountProgram', 'membership_id', 'id');
+    public function discountListLogs (){
+        return $this->hasMany('App\Models\DiscountProgramLog', 'membership_id', 'id');
     }
 }

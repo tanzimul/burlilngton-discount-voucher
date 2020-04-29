@@ -1,33 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
-<form action="{{ route('member.store') }}" method="post" id="memberSignupForm">
+<form action="" method="post" id="memberSignupForm">
     @csrf
     <!-- Package Selection -->
     <section id="package">
         <div class="container">
             <div class="row justify-content-center">
-                <!-- <div class="col-md-8 mb-5">
-                    @if ($errors->any())
-                    <div class="alert alert-danger" id="alertMessage">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                    @if(session('success'))
-                    <div class="alert alert-success" id="alertMessage">
-                        {{ session('success') }}
-                    </div>
-                    @endif
-                    @if(session('error'))
-                    <div class="alert alert-danger" id="alertMessage">
-                        {{ session('error') }}
-                    </div>
-                    @endif
-                </div> -->
                 <div class="col-md-8">
                     <div class="package__block">
                         <h1 class="text-center">Daily Discount Program Enrollment</h1>
@@ -59,12 +38,6 @@
                             </div>
                             @endauth
 
-                            <!-- <div class="text-center mt-4">
-                                <a class="btn btn-success w-25 text-white" href="#discount">Go</a>
-                            </div> -->
-
-
-                            <!-- <div class="discount__block--form mx-auto mt-5"> -->
                             <div class="mt-5">
                                 <div class="form-group row">
                                     <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
@@ -91,16 +64,19 @@
                                     </div>
                                 </div>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news" checked>
+                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news" checked >
                                     <label class="col-form-label custom-control-label p-4" for="newsletter">
                                         Please add me to your list so I can receive news, special events info and promotional offers (required for all discounts)
                                     </label>
                                 </div>
                                 <div class="text-center mt-3">
-                                    <input class="btn btn-success" type="submit" value="Submit">
+                                    <div class="d-none" id="memberSignUpUrl">{{ route('member.store') }}</div>
+                                    <button class="btn btn-success" type="submit" id="signUpButton">Submit</button>
                                 </div>
-
-                                <div class="my-4">
+                                <div class="mt-4 alert d-none" id="alert">
+                                    <span id="response"></span>
+                                </div>
+                                <!-- <div class="my-4">
                                     @if ($errors->any())
                                     <div class="alert alert-danger" id="alertMessage">
                                         <ul>
@@ -120,16 +96,13 @@
                                         {{ session('error') }}
                                     </div>
                                     @endif
-                                </div>
+                                </div> -->
                             </div>
                             <div class="mt-4">
                                 <div class="text-center">
                                     <a class="btn btn-success" href="https://www.burlingtonsprings.com/" target="_blank">Return to Home page</a>
                                 </div>
                             </div>
-
-
-
 
                         </div>
                         <div class="package__block--footer">
@@ -143,60 +116,5 @@
         </div>
     </section>
     <!-- /Package Selection -->
-
-    <!-- Discount Enrollment -->
-    <!-- <section id="discount" class="mt-5 pt-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="discount__block">
-                        <h1 class="text-center">Daily Discount Program Enrollment</h1>
-                        <h5 class="text-center">Complete to receive instant email with personalized and reprintable Daily Discount Vouchers</h5>
-                        <div class="discount__block--form mx-auto mt-5">
-                            <div class="form-group row">
-                                <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstName" name="first_name" required value="Tanzim">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="lastName" name="last_name" required value="Tanim">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="email" class="col-sm-4 col-form-label">Email Address</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="email" name="email" required value="tanzimul.tanim@gmail.com">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required value="tanzimul.tanim@gmail.com">
-                                </div>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news">
-                                <label class="col-form-label custom-control-label p-4" for="newsletter">
-                                    Please add me to your list so I can receive news, special events info and promotional offers (required for all discounts)
-                                </label>
-                            </div>
-                            <div class="text-center mt-3">
-                                <input class="btn btn-success" type="submit" value="Submit">
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="text-center">
-                                <a class="btn btn-success" href="https://www.burlingtonsprings.com/" target="_blank">Return to Home page</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- /Discount Enrollment -->
 </form>
 @endsection

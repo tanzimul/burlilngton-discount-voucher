@@ -94,6 +94,62 @@ $(document).ready(function () {
                 equalTo: "Please enter the same email as above"
             },
 
+        },
+        submitHandler: function (form) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('#memberSignupForm #signUpButton').html('Submitting..');
+            $("#memberSignupForm #signUpButton").attr("disabled", true);
+            
+            // console.log($('#reprintForm #reprintUrl').text());
+            $.ajax({
+                url: $('#memberSignupForm #memberSignUpUrl').text(),
+                type: "POST",
+                data: $('#memberSignupForm').serialize(),
+                success: function (response) {
+                    console.log(response);
+                    //document.getElementById("dailyDiscountRedeemedForm").reset();
+                    $('#memberSignupForm #signUpButton').html('Submit');
+                    $('#memberSignupForm #response').show();
+                    $('#memberSignupForm #alert').show();
+                    if (response.message === "Validation error") {
+                        
+                        var output = '<ul class="error-list">';
+                        $.each(response.data, function(index, element) {
+                            output += '<li>';
+                            output += element;
+                            output += '</li>';
+                        });
+                        $('#memberSignupForm #response').html(output);
+
+                    } else {
+                        $('#memberSignupForm #response').html(response.message);
+                    }
+                    $('#memberSignupForm #alert').removeClass('d-none');
+                    if (response.status === true) {
+                        $("#memberSignupForm #signUpButton").attr("disabled", false);
+                        $('#memberSignupForm #alert').addClass('alert-success');
+                        document.getElementById("memberSignupForm").reset();
+                    } else {
+                        $("#memberSignupForm #signUpButton").attr("disabled", false);
+                        $('#memberSignupForm #alert').addClass('alert-danger');
+                    }
+
+                    setTimeout(function () {
+                        //document.getElementById("dailyDiscountRedeemedForm").reset();
+                        $('#memberSignupForm #response').hide();
+                        $('#memberSignupForm #alert').hide();
+                        $('#memberSignupForm #alert').addClass('d-none');
+                        $('#memberSignupForm #alert').removeClass('alert-success');
+                        $('#memberSignupForm #alert').removeClass('alert-danger');
+                    }, 5000);
+
+                }
+            });
         }
     });
 
@@ -177,18 +233,74 @@ $(document).ready(function () {
     $("#reprintForm").validate({
         rules: {
             discount: {
-                required: true,
+                required: "#email:blank",
                 digits: true
             },
             email: {
-                required: true,
-                email: true,
-                emailCustom: true
+                required: "#discount:blank",
+                // email: true,
+                // emailCustom: true
             },
         },
         messages: {
             discount: "Please enter your Discount ID",
             email: "Please enter a valid email address",
+        },
+        submitHandler: function (form) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('#reprintForm #sendButton').html('Sending..');
+            $("#reprintForm #sendButton").attr("disabled", true);
+            
+            // console.log($('#reprintForm #reprintUrl').text());
+            $.ajax({
+                url: $('#reprintForm #reprintUrl').text(),
+                type: "POST",
+                data: $('#reprintForm').serialize(),
+                success: function (response) {
+                    console.log(response);
+                    //document.getElementById("dailyDiscountRedeemedForm").reset();
+                    $('#reprintForm #sendButton').html('Send');
+                    $('#reprintForm #response').show();
+                    $('#reprintForm #alert').show();
+                    if (response.message === "Validation error") {
+                        
+                        var output = '<ul class="error-list">';
+                        $.each(response.data, function(index, element) {
+                            output += '<li>';
+                            output += element;
+                            output += '</li>';
+                        });
+                        $('#reprintForm #response').html(output);
+
+                    } else {
+                        $('#reprintForm #response').html(response.message);
+                    }
+                    $('#reprintForm #alert').removeClass('d-none');
+                    if (response.status === true) {
+                        $("#reprintForm #sendButton").attr("disabled", false);
+                        $('#reprintForm #alert').addClass('alert-success');
+                        document.getElementById("reprintForm").reset();
+                    } else {
+                        $("#reprintForm #sendButton").attr("disabled", false);
+                        $('#reprintForm #alert').addClass('alert-danger');
+                    }
+
+                    setTimeout(function () {
+                        //document.getElementById("dailyDiscountRedeemedForm").reset();
+                        $('#reprintForm #response').hide();
+                        $('#reprintForm #alert').hide();
+                        $('#reprintForm #alert').addClass('d-none');
+                        $('#reprintForm #alert').removeClass('alert-success');
+                        $('#reprintForm #alert').removeClass('alert-danger');
+                    }, 5000);
+
+                }
+            });
         }
     });
 

@@ -1,6 +1,9 @@
 @extends('layouts.master')
 @section('content')
-<form action="{{ route('reprint.voucher') }}" method="post" id="reprintForm">
+<!-- <div id="preloader">
+  <div id="loader"></div>
+</div> -->
+<form action="javascript:void(0)" method="post" id="reprintForm">
     @csrf
     <!-- Re-Print Voucher -->
     <section id="reprint">
@@ -14,19 +17,25 @@
                             <div class="form-group row">
                                 <label for="discount" class="col-sm-3 col-form-label">Discount #</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="discount" name="discount" required>
+                                    <input type="number" class="form-control" id="discount" name="discount">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-sm-3 col-form-label">Email Address</label>
                                 <div class="col-sm-9">
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email">
                                 </div>
                             </div>
                             <div class="text-center mt-5">
-                                <input class="btn btn-success" type="submit" value="Send">
+                                <input type="hidden" name="date" id="dateused">
+                                
+                                <div class="d-none" id="reprintUrl">{{ route('reprint.voucher') }}</div>
+                                <button class="btn btn-success" type="submit" id="sendButton">Send</button>
                             </div>
-                            <div class="row justify-content-center mt-3">
+                            <div class="mt-4 alert d-none" id="alert">
+                                <span id="response"></span>
+                            </div>
+                            <!-- <div class="row justify-content-center mt-3">
                                 <div class="col-md-10">
                                     @if ($errors->any())
                                     <div class="alert alert-danger" id="alertMessage">
@@ -48,7 +57,7 @@
                                     </div>
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="mt-4">
                             <div class="text-center">

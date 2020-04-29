@@ -22,6 +22,8 @@ class UserSeeder extends Seeder
                     'email_verified_at' => now(),
                     'password' => '$2y$10$pzY2x8VTLIVO/Hbex.XC2uz5W6XYQ7LkfM6/Cq/Fq0olWHtqYkG4e', // mightyegg
                     'remember_token' => Str::random(10),
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ),
                 array(
                     'name' => 'Staff',
@@ -30,6 +32,8 @@ class UserSeeder extends Seeder
                     'email_verified_at' => now(),
                     'password' => '$2y$10$pzY2x8VTLIVO/Hbex.XC2uz5W6XYQ7LkfM6/Cq/Fq0olWHtqYkG4e', // mightyegg
                     'remember_token' => Str::random(10),
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ),
             )
         );
