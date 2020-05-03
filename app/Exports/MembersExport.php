@@ -10,6 +10,6 @@ class MembersExport implements FromView
 {
     public function view(): View
     {
-        return view('pdfs.customer', ['customers' => Member::with('discountList')->get()]);
+        return view('pdfs.customer', ['customers' => Member::all()]);
     }
 }

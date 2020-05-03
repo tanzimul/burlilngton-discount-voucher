@@ -17,7 +17,7 @@ class CreateDiscountProgramLogsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('membership_id');
             $table->unsignedInteger('discount_id');
-            $table->dateTime('last_used_at', 0)->nullable();
+            $table->date('last_used_at', 0)->nullable();
             $table->timestamps();
 
             $table->foreign('discount_id')->references('discount_id')->on('members');

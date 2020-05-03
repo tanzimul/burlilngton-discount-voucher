@@ -85,27 +85,48 @@ class AdminController extends Controller
 
     public function export(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'report' => ['required'],
-            'from' => [Rule::requiredIf($request->report == 'redemption_transactions')],
-            'to' => [Rule::requiredIf($request->report == 'redemption_transactions')],
-            'date' => [Rule::requiredIf($request->report == 'daily_reconciliation')],
-        ]);
 
-        if (!($validator->fails())) {
-            if($request->report == 'customer_record'){
+        // dd($request->all());
+
+        if($request['report'] == 'customer_record'){
+            $validator = Validator::make($request->all(), [
+                'report' => ['required'],
+            ]);
+    
+            if (!($validator->fails())) {
                 return Excel::download(new MembersExport(), 'Customer List.xlsx');
-            }else if($request->report == 'redemption_transactions'){
-                return Excel::download(new RedemptionTransactionsExport($request->from, $request->to), 'Redemption Transactions List.xlsx');
-            }else if($request->report == 'daily_reconciliation'){
-                return Excel::download(new DailyReconciliationExport($request->date), 'Daily Reconciliation List.xlsx');
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput();
             }
-        } else {
-            //dd($validator->messages());
-            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        if($request['report'] == 'redemption_transactions'){
+            $validator = Validator::make($request->all(), [
+                'report' => ['required'],
+                'from' => ['required'],
+                'to' => ['required']
+            ]);
+    
+            if (!($validator->fails())) {
+                return Excel::download(new RedemptionTransactionsExport($request->from, $request->to), 'Redemption Transactions List.xlsx');
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
 
 
+        if($request['report'] == 'daily_reconciliation'){
+            $validator = Validator::make($request->all(), [
+                'date' => ['required'],
+            ]);
+    
+            if (!($validator->fails())) {
+                return Excel::download(new DailyReconciliationExport($request->date), 'Daily Reconciliation List.xlsx');
+            } else {
+                //dd($validator->messages());
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+        }
         return view('admin.report');
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\DiscountProgram;
+use App\Models\DiscountProgramLog;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -15,36 +15,36 @@ class DailyReconciliationExport implements FromView
 
     public function view(): View
     {
-        $discounts = DiscountProgram::with('memberData')
-            ->where(['is_used' => 1, 'used_at' => $this->date])
-            // ->whereBetween('used_at', array($this->from, $this->to))
+        $discounts = DiscountProgramLog::with('memberData')
+            ->where('last_used_at', $this->date)
             ->get();
         $paperRegular = array();
         $phoneRegular = array();
         $paperSenior = array();
         $phoneSenior = array();
         $flyer = array();
-        $adminDiscount = array();
+        // $adminDiscount = array();
 
         //dd(count($discounts->device));
         foreach ($discounts as $key => $discount) {
-            if($discount->membership_type == 'regular'){
-                if( $discount->device == 'paper'){
-                    $paperRegular[$key] = $discount->device;
+            if($discount->memberData->membership_type == 'regular'){
+                if( $discount->memberData->device == 'paper'){
+                    $paperRegular[$key] = $discount->memberData->device;
                 }else {
-                    $phoneRegular[$key] = $discount->device;
+                    $phoneRegular[$key] = $discount->memberData->device;
                 }
-            }else if($discount->membership_type == 'senior'){
-                if( $discount->device == 'paper'){
-                    $paperSenior[$key] = $discount->device;
+            }else if($discount->memberData->membership_type == 'senior'){
+                if( $discount->memberData->device == 'paper'){
+                    $paperSenior[$key] = $discount->memberData->device;
                 }else {
-                    $phoneSenior[$key] = $discount->device;
+                    $phoneSenior[$key] = $discount->memberData->device;
                 }
-            }else if($discount->membership_type == 'flyer'){
-                $flyer[$key] = $discount->id;
-            }else if($discount->discount_id == 9999){
-                $adminDiscount[$key] = $discount->id;
+            }else if($discount->memberData->membership_type == 'flyer'){
+                $flyer[$key] = $discount->memberData->id;
             }
+            // else if($discount->discount_id == 9999){
+            //     $adminDiscount[$key] = $discount->id;
+            // }
             
             
         }
@@ -53,16 +53,17 @@ class DailyReconciliationExport implements FromView
         $paperSeniorCount = count($paperSenior);
         $phoneSeniorCount = count($phoneSenior);
         $flyerCount = count($flyer);
-        $adminDiscountCount = count($adminDiscount);
+        // $adminDiscountCount = count($adminDiscount);
 
         $sumOfRegular = $paperRegularCount+$phoneRegularCount;
         $sumOfSenior = $paperSeniorCount+$phoneSeniorCount;
         $sumOfFlyer = $flyerCount;
-        $sumOfAdminDiscount = $adminDiscountCount;
+        // $sumOfAdminDiscount = $adminDiscountCount;
 
         $totalPaper = $paperRegularCount+$paperSeniorCount;
         $totalPhone = $phoneRegularCount+$phoneSeniorCount;
-        $subTotal = $sumOfRegular+$sumOfSenior+$sumOfFlyer+$sumOfAdminDiscount;
+        // $subTotal = $sumOfRegular+$sumOfSenior+$sumOfFlyer+$sumOfAdminDiscount;
+        $subTotal = $sumOfRegular+$sumOfSenior+$sumOfFlyer;
 
 
         //dd($paperRegularCount);
@@ -75,11 +76,11 @@ class DailyReconciliationExport implements FromView
                 'paperSeniorCount' => $paperSeniorCount,
                 'phoneSeniorCount' => $phoneSeniorCount,
                 'flyerCount' => $flyerCount,
-                'adminDiscountCount' => $adminDiscountCount,
+                // 'adminDiscountCount' => $adminDiscountCount,
                 'sumOfRegular' => $sumOfRegular,
                 'sumOfSenior' => $sumOfSenior,
                 'sumOfFlyer' => $sumOfFlyer,
-                'sumOfAdminDiscount' => $sumOfAdminDiscount,
+                // 'sumOfAdminDiscount' => $sumOfAdminDiscount,
                 'totalPaper' => $totalPaper,
                 'totalPhone' => $totalPhone,
                 'subTotal' => $subTotal,

@@ -106,12 +106,13 @@ $(document).ready(function () {
       }
     });
     $('#dailyDiscountRedeemedForm #saveForm').html('Searching..');
+    $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", true);
     $.ajax({
       url: $('#dailyDiscountRedeemedForm #discountUserSearchUrl').text(),
       type: 'GET',
       data: $('#dailyDiscountRedeemedForm').serialize(),
       success: function success(response) {
-        // console.log(response);
+        console.log(response);
         $('#dailyDiscountRedeemedForm #saveForm').html('Save');
         $('#dailyDiscountRedeemedForm #response').show();
         $('#dailyDiscountRedeemedForm #alert').show();
@@ -120,10 +121,12 @@ $(document).ready(function () {
 
         if (response.status === true) {
           $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
-          $('#dailyDiscountRedeemedForm #lastname').val(response.data); //document.getElementById("dailyDiscountRedeemedForm").reset();
+          $('#dailyDiscountRedeemedForm #lastname').val(response.data);
+          $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", false); //document.getElementById("dailyDiscountRedeemedForm").reset();
         } else {
           $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
           $('#dailyDiscountRedeemedForm #lastname').val('');
+          $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", false);
         }
 
         setTimeout(function () {
@@ -192,8 +195,8 @@ $(document).ready(function () {
         type: "POST",
         data: $('#memberSignupForm').serialize(),
         success: function success(response) {
-          console.log(response); //document.getElementById("dailyDiscountRedeemedForm").reset();
-
+          // console.log(response);
+          //document.getElementById("dailyDiscountRedeemedForm").reset();
           $('#memberSignupForm #signUpButton').html('Submit');
           $('#memberSignupForm #response').show();
           $('#memberSignupForm #alert').show();
@@ -448,14 +451,17 @@ $(document).ready(function () {
           $('#dailyDiscountRedeemedForm #alert').removeClass('d-none');
 
           if (response.status === true) {
-            $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
-            document.getElementById("dailyDiscountRedeemedForm").reset();
+            $('#dailyDiscountRedeemedForm #alert').addClass('alert-success'); // $('#dailyDiscountRedeemedForm #discount').val('');
+            // $('#dailyDiscountRedeemedForm #lastname').val('');
           } else {
             $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
           }
 
           setTimeout(function () {
             //document.getElementById("dailyDiscountRedeemedForm").reset();
+            $('#dailyDiscountRedeemedForm #discount').val('');
+            $('#dailyDiscountRedeemedForm #lastname').val('');
+            $('#dailyDiscountRedeemedForm #phone').prop('checked', false);
             $('#dailyDiscountRedeemedForm #response').hide();
             $('#dailyDiscountRedeemedForm #alert').hide();
             $('#dailyDiscountRedeemedForm #alert').addClass('d-none');
@@ -517,14 +523,20 @@ $(document).ready(function () {
             if (response.status === true) {
               $('#customerRecordInquiryForm #alert').addClass('alert-success'); // console.log(response.data.member_data);
 
-              $('#firstName').val(response.data.member_data.first_name);
-              $('#lastName').val(response.data.member_data.last_name);
-              $('#emailAddress').val(response.data.member_data.email);
-              $('#memeberId').val(response.data.member_data.id);
-              $('#type').val(response.data.membership_type);
+              $('#customerRecordInquiryForm #firstName').val(response.data.first_name);
+              $('#customerRecordInquiryForm #lastName').val(response.data.last_name);
+              $('#customerRecordInquiryForm #emailAddress').val(response.data.email);
+              $('#customerRecordInquiryForm #memeberId').val(response.data.id);
+              $('#customerRecordInquiryForm #type').val(response.data.membership_type);
+              var discount_id = response.data.discount_id.toString();
+
+              if (discount_id.length < 4) {
+                discount_id = '0' + discount_id;
+              }
+
+              $('#customerRecordInquiryForm #discount').val(discount_id);
             } else {
-              $('#customerRecordInquiryForm #alert').addClass('alert-danger');
-              document.getElementById("customerRecordInquiryForm").reset();
+              $('#customerRecordInquiryForm #alert').addClass('alert-danger'); //document.getElementById("customerRecordInquiryForm").reset();
             }
 
             setTimeout(function () {
@@ -533,10 +545,9 @@ $(document).ready(function () {
               $('#customerRecordInquiryForm #alert').addClass('d-none');
               $('#customerRecordInquiryForm #alert').removeClass('alert-success');
               $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
-            }, 5000);
-            setTimeout(function () {
-              document.getElementById("customerRecordInquiryForm").reset();
-            }, 60000);
+            }, 5000); // setTimeout(function () {
+            //     document.getElementById("customerRecordInquiryForm").reset();
+            // }, 60000);
           }
         });
       }); // Search End //
@@ -570,15 +581,13 @@ $(document).ready(function () {
             $('#customerRecordInquiryForm #alert').removeClass('d-none');
 
             if (response.status === true) {
-              $('#customerRecordInquiryForm #alert').addClass('alert-success');
-              console.log(response);
+              $('#customerRecordInquiryForm #alert').addClass('alert-success'); // console.log(response);
             } else {
-              $('#customerRecordInquiryForm #alert').addClass('alert-danger');
-              document.getElementById("customerRecordInquiryForm").reset();
+              $('#customerRecordInquiryForm #alert').addClass('alert-danger'); // document.getElementById("customerRecordInquiryForm").reset();
             }
 
             setTimeout(function () {
-              document.getElementById("customerRecordInquiryForm").reset();
+              // document.getElementById("customerRecordInquiryForm").reset();
               $('#customerRecordInquiryForm #response').hide();
               $('#customerRecordInquiryForm #alert').hide();
               $('#customerRecordInquiryForm #alert').addClass('d-none');
@@ -637,7 +646,7 @@ $(document).ready(function () {
                 $('#customerRecordInquiryForm #alert').removeClass('d-none');
                 $('#customerRecordInquiryForm #alert').addClass('alert-danger');
                 setTimeout(function () {
-                  document.getElementById("customerRecordInquiryForm").reset();
+                  //document.getElementById("customerRecordInquiryForm").reset();
                   $('#customerRecordInquiryForm #response').hide();
                   $('#customerRecordInquiryForm #alert').hide();
                   $('#customerRecordInquiryForm #alert').addClass('d-none');

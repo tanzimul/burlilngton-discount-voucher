@@ -21,26 +21,29 @@
 </head>
 
 <body>
-    
+    <h1>Redemption Transactions from {{ $from }} to {{ $to }}</h1>
     <table>
         <thead>
             <tr>
-                <th colspan="4" style="text-align: center"><h1>Redemption Transactions from {{ $from }} to {{ $to }}</h1></th>
-            </tr>
-            <tr>
                 <th>#SL</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Membership Type</th>
-                <th>Discount Voucher Number</th>
+                <th>Discount #</th>
+                <th>Last Used At</th>
             </tr>
         </thead>
         <tbody>
             @foreach($discounts as $key => $discount)
             <tr>
                 <td>{{ $key+1 }}</td>
+                <td>{{ $discount->memberData->first_name }}</td>
+                <td>{{ $discount->memberData->last_name }}</td>
                 <td>{{ $discount->memberData->email }}</td>
-                <td>{{ $discount->membership_type }}</td>
-                <td>{{ $discount->discount_id }}</td>
+                <td>{{ $discount->memberData->membership_type }}</td>
+                <td>{{ $discount->memberData->discount_id }}</td>
+                <td>{{ $discount->last_used_at }}</td>
             </tr>
             @endforeach
         </tbody>

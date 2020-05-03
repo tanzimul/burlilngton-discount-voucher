@@ -22,52 +22,42 @@
 </head>
 
 <body>
-
+    <h2>Burlington Springs Daily Discount Program – Daily Redemptions</h2>
+    <h4>Date : {{ $date }}</h4>
     <table>
         <thead>
             <tr>
-                <th colspan="4" style="text-align: center">
-                    <h2>Burlington Springs Daily Discount Program – Daily Redemptions</h2>
-                    <h4>Date : {{ $date }}</h4>
-                </th>
-            </tr>
-            <tr>
-                <th></th>
-                <th>Paper</th>
-                <th>Phone</th>
-                <th>Total</th>
+                <th>#</th>
+                <th><strong>Paper</strong></th>
+                <th><strong>Phone</strong></th>
+                <th><strong>Total</strong></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Regular</td>
+                <td><strong>Regular</strong></td>
                 <td>{{ $paperRegularCount }}</td>
                 <td>{{ $phoneRegularCount }}</td>
                 <td>{{ $sumOfRegular }}</td>
             </tr>
             <tr>
-                <td>Senior</td>
+                <td><strong>Senior</strong></td>
                 <td>{{ $paperSeniorCount }}</td>
                 <td>{{ $phoneSeniorCount }}</td>
                 <td>{{ $sumOfSenior }}</td>
             </tr>
             <tr>
-                <td>Frequent Flyer</td>
+                <td><strong>Frequent Flyer</strong></td>
                 <td></td>
                 <td></td>
                 <td>{{ $sumOfFlyer }}</td>
             </tr>
-            <tr>
-                <td>Admin 9999*</td>
-                <td></td>
-                <td></td>
-                <td>{{ $sumOfAdminDiscount }}</td>
-            </tr>
+
 
         </tbody>
         <tfoot>
             <tr>
-                <th>Total</th>
+                <th><strong>Total</strong></th>
                 <th>{{ $totalPaper }}</th>
                 <th>{{ $totalPhone }}</th>
                 <th>{{ $subTotal }}</th>

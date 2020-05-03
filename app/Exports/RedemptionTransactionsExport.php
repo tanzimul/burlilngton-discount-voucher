@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\DiscountProgram;
+use App\Models\DiscountProgramLog;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -19,9 +19,8 @@ class RedemptionTransactionsExport implements FromView
         return view(
             'pdfs.redemption',
             [
-                'discounts' => DiscountProgram::with('memberData')
-                    ->where(['is_used' => 1])
-                    ->whereBetween('used_at', array($this->from, $this->to))
+                'discounts' => DiscountProgramLog::with('memberData')
+                    ->whereBetween('last_used_at', array($this->from, $this->to))
                     ->get(),
                 'from' => $this->from,
                 'to' => $this->to

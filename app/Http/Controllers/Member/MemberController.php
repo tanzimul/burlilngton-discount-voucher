@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade as PDF;
 use Mail;
 use env;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 
@@ -142,6 +143,14 @@ class MemberController extends Controller
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
 
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
+
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
                             'status' => true,
@@ -162,6 +171,14 @@ class MemberController extends Controller
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
+
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
 
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
@@ -196,6 +213,14 @@ class MemberController extends Controller
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
 
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
+
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
                             'status' => true,
@@ -216,6 +241,14 @@ class MemberController extends Controller
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
+
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
 
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
@@ -250,6 +283,14 @@ class MemberController extends Controller
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
 
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
+
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
                             'status' => true,
@@ -270,6 +311,14 @@ class MemberController extends Controller
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
+
+                        if(Auth::user()){
+                            return response()->json([
+                                'message' => 'Player is now registered for our Daily Discounts Program. An email has been sent with personalized Discount Vouchers and/or Discount #.',
+                                'status' => true,
+                                'data' => null
+                            ], 200);
+                        }
 
                         return response()->json([
                             'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',

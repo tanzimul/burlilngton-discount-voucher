@@ -29,7 +29,12 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Discount Voucher Number</th>
+                <th>Membership Type</th>
+                <th>Discount #</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                
+
             </tr>
         </thead>
         <tbody>
@@ -39,11 +44,10 @@
                 <td>{{ $customer->first_name }}</td>
                 <td>{{ $customer->last_name }}</td>
                 <td>{{ $customer->email }}</td>
-                <td>
-                    @foreach ( $customer->discountList as $key2 => $discount )
-                        {{ $discount->discount_id }}@if (!$loop->last),@endif
-                    @endforeach
-                </td>
+                <td>{{ $customer->membership_type }}</td>
+                <td>{{ $customer->discount_id }}</td>
+                <td>{{ $customer->created_at }}</td>
+                <td>{{ $customer->updated_at }}</td>
             </tr>
             @endforeach
         </tbody>

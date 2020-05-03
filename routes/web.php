@@ -52,6 +52,6 @@ Route::get('/all-clear', function() {
     Artisan::call('route:clear');
     Artisan::call('view:clear');
     // Artisan::call('optimize:clear');
-    Artisan::call('migrate:refresh --seed');
+    Artisan::call('migrate:fresh --seed');
     return "All cleared";
 });
