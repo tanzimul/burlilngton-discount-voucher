@@ -53,7 +53,7 @@
         <p>Thank you for patronage, we look forward to seeing you regularly at Burlington Springs and please let us know how we can improve your experience. Please retain this email for your records.</p>
         
         <p>Regards,</p>
-        <p>The Burlington Springs Team</p>
+        <p><strong>The Burlington Springs Team</strong></p>
 
         <p>* For easy access you may wish to store a photo or screen shot of the top portion of this confirmation email. Install a simple Android or iPhone wallet app, save this photo or screenshot to the app, and effectively use it as your “Burlington Springs” app.</p>
         <p>Please go to <a href="https://www.burlingtonsprings.com" target="_blank">Daily Discount Program</a> to see apps that we recommend that suit this need.</p>

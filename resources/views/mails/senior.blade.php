@@ -64,7 +64,7 @@
         <p>Daily Discount Program usage conditions are described on the vouchers and on our website. If you require any clarification, please ask our pro shop team.</p>
         <p>Thank you for enrolling in our program – we look forward to seeing you regularly at Burlington Springs and please let us know how we can improve your experience.</p>
         <p>Regards,</p>
-        <p>The Burlington Springs Team</p>
+        <p><strong>The Burlington Springs Team</strong></p>
 
         <p>* For the “paperless” option, please save the attached ‘single voucher’ JPEG to your phone so you can access present it on each visit to show to the pro shop team.  One easy way to do this is to install a simple Android or iPhone wallet app, save only our voucher to the app, and effectively use it as your “Burlington Springs Voucher” app.</p>
         <p>Please go to <a href="https://www.burlingtonsprings.com" target="_blank">Daily Discount Program</a> to see apps that we recommend that suit this need.</p>

@@ -20,11 +20,11 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label for="dateused">Date of use</label>
-                                        <input type="text" class="form-control" name="date" id="dateused" required>
+                                        <input type="text" class="form-control" name="date" id="dateused" required autocomplete="off">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="discount">Discount #</label>
-                                        <input type="number" class="form-control" name="discount" id="discount" required>
+                                        <input type="number" class="form-control" name="discount" id="discount" required autocomplete="off">
                                     </div>
                                     <div class="col-md-2">
                                         <label for="phone">Phone</label>
@@ -45,9 +45,7 @@
                                     <div class="d-none" id="discountUserSearchUrl">{{ route('staff.user.discount') }}</div>
                                     <button type="submit" id="saveForm" class="btn btn-success">Save</button>
                                 </div>
-                                <div class="mt-4 alert d-none" id="alert">
-                                    <span id="response"></span>
-                                </div>
+                                <div id="message"></div>
                             </div>
                         </div>
                     </form>
@@ -70,7 +68,7 @@
                         <div class="row form-row">
                             <div class="col-md-2">
                                 <label for="discount">Discount #</label>
-                                <input type="number" class="form-control" name="discount" id="discount" required>
+                                <input type="number" class="form-control" name="discount" id="discount" required autocomplete="off">
                             </div>
                             <div class="col-md-2">
                                 <label for="type">Type *</label>
@@ -85,10 +83,10 @@
                                         <label class="pt-2">First/Last Name</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" name="first_name" id="firstName">
+                                        <input type="text" class="form-control" name="first_name" id="firstName" autocomplete="off">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" name="last_name" id="lastName">
+                                        <input type="text" class="form-control" name="last_name" id="lastName" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-row mt-3">
@@ -96,7 +94,7 @@
                                         <label class="pt-2" for="email">Email Address</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="email" class="form-control" name="email" id="emailAddress">
+                                        <input type="email" class="form-control" name="email" id="emailAddress" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -108,9 +106,8 @@
                                 <button type="submit" id="search" class="btn btn-success">Search</button>
                                 <button type="submit" id="delete" class="btn btn-success">Delete</button>
                                 <button type="submit" id="save" class="btn btn-success">Save</button>
-                                <div class="mt-4 alert d-none" id="alert">
-                                    <span id="response"></span>
-                                </div>
+                                <button type="reset" class="btn btn-success text-white">Reset</button>
+                                <div id="message"></div>
                             </div>
 
                         </div>

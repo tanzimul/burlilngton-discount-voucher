@@ -12,8 +12,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Mail;
 use env;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-
+// use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
 {
@@ -32,7 +31,6 @@ class MemberController extends Controller
 
     public function reprintVoucher(Request $request)
     {
-        // dd($request->all());
         if($request->has('discount') && $request['discount'] != null){
             $validator = Validator::make($request->all(), [
                 'discount' => ['numeric', 'digits:4'],
@@ -45,29 +43,25 @@ class MemberController extends Controller
                     $sendEmail = $this->resendEmailWithAttachment($memberSearchByDiscountID);
                     $memberSearchByDiscountID->print_count = $memberSearchByDiscountID->print_count+1;
                     $memberSearchByDiscountID->save();
-                    //return redirect()->back()->with('success', 'An email with your personalized Daily Discount Vouchers has been sent to you.');
+                    
                     return response()->json([
                         'message' => 'An email with your personalized Daily Discount Vouchers has been sent to you.',
                         'status' => true,
                         'data' => null
                     ], 200);
-
                 } else {
                     return response()->json([
                         'message' => 'Discount # is not enrolled. Please go to the Daily Discount Program page to enroll.',
                         'status' => false,
                         'data' => null
                     ], 200);
-                    //return redirect()->back()->with('error', 'Discount # is not enrolled. Please go to the Daily Discount Program page to enroll.');
                 }
             } else {
                 return response()->json([
-                    'message' => 'Validation error',
+                    'message' => 'The discount must be 4 digits.',
                     'status' => false,
                     'data' => $validator->messages()
                 ], 200);
-                
-                //return redirect()->back()->withErrors($validator)->withInput();
             }
         } else if ($request->has('email') && $request['email'] != null){
             $validator = Validator::make($request->all(), [
@@ -94,25 +88,19 @@ class MemberController extends Controller
                             'data' => null
                         ], 200);
                     }
-                    
-                    //return redirect()->back()->with('success', 'An email with your personalized Daily Discount Vouchers has been sent to you.');
-
                 } else {
                     return response()->json([
                         'message' => 'Email address is not enrolled. Please go to the Daily Discount Program page to enroll.',
                         'status' => false,
                         'data' => null
                     ], 200);
-                    // return redirect()->back()->with('error', 'Email address is not enrolled. Please go to the Daily Discount Program page to enroll.');
                 }
-                
             } else {
                 return response()->json([
-                    'message' => 'Validation error',
+                    'message' => 'The email must be a valid email address.',
                     'status' => false,
                     'data' => $validator->messages()
                 ], 200);
-                // return redirect()->back()->withErrors($validator)->withInput();
             }
         }
     }
@@ -133,12 +121,19 @@ class MemberController extends Controller
             if ($request['package'] == 'regular') {
 
                 $maxDiscountProgram = Member::where('membership_type', 'regular')->where('discount_id','>',999)->where('discount_id','<',6999)->max('discount_id');
-                //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
                     $discountCode = 1000;
                     
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
+
+                    // return response()->json([
+                    //     'message' => $sendEmail,
+                    //     'status' => true,
+                    //     'data' => null
+                    // ], 200);
+
+
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
@@ -199,12 +194,10 @@ class MemberController extends Controller
                         'status' => false,
                         'data' => null
                     ], 200);
-                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'senior') {
 
                 $maxDiscountProgram = Member::where('membership_type', 'senior')->where('discount_id','>',6999)->where('discount_id','<',9999)->max('discount_id');
-                //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
                     $discountCode = 7000;
                     
@@ -269,12 +262,10 @@ class MemberController extends Controller
                         'status' => false,
                         'data' => null
                     ], 200);
-                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             } else if ($request['package'] == 'flyer') {
 
                 $maxDiscountProgram = Member::where('membership_type', 'flyer')->where('discount_id','>',99)->where('discount_id','<',999)->max('discount_id');
-                //dd($maxDiscountProgram);
                 if ($maxDiscountProgram == null) {
                     $discountCode = 100;
                     
@@ -339,17 +330,14 @@ class MemberController extends Controller
                         'status' => false,
                         'data' => null
                     ], 200);
-                    //return redirect()->back()->with('error', 'Sorry, our discount quota has been filled up. We cannot enroll your email.');
                 }
             }
-            // return redirect()->back()->with('success', 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.');
         } else {
             return response()->json([
                 'message' => 'Validation error',
                 'status' => false,
                 'data' => $validator->messages()
             ], 200);
-            // return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
@@ -405,12 +393,32 @@ class MemberController extends Controller
                     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
                     ->setPaper('a4', 'potrait');
                 //return $pdf->download('lukuluku.pdf');
-                Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf) {
+
+
+                //$image_path = public_path('images/regular-voucher.png');
+                // $font_path = storage_path('fonts/calibri.ttf');
+
+                //dd($image_path,$font_path);
+                // $img = Image::make($image_path);
+                // $img->text($data['discountCode'].$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
+                //     $font->file(storage_path('fonts/calibrib.ttf'));
+                //     $font->size(50);
+                //     $font->color('#000000');
+                //     $font->align('center');
+                //     $font->valign('top');
+                // });
+                // //return $img;
+                // $img->save(public_path('image_converted'.$data['discountCode'].'.png'));
+
+
+                // Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf, $img) {
+                    Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf) {
                     $message
                         ->to($data['email'], $data['first_name'])
                         ->replyTo($data['replyTo'], $data['replyToName'])
                         ->subject('Burlington Springs Daily Discount Program')
                         ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf');
+                        //->attach(public_path('image_converted'.$data['discountCode'].'.png'));
                 });
             } else {
                 Mail::send('mails.flyer', compact('data'), function ($message) use ($data) {
@@ -424,14 +432,11 @@ class MemberController extends Controller
             return $message = 'email sent';
         } catch (JWTException $exception) {
             return $message = 'email not sent' + $exception->getMessage();
-            //return redirect()->back()->with('error', $exception->getMessage());
         }
         if (Mail::failures()) {
             return $message = 'email not sent mail failure';
-            //return redirect()->back()->with('error', 'Error sending mail');
         } else {
             return $message = 'email sent success';
-            //return redirect()->back()->with('success', 'Email sent successfully');
         }
     }
 
@@ -473,63 +478,11 @@ class MemberController extends Controller
             return $message = 'email sent';
         } catch (JWTException $exception) {
             return $message = 'email not sent' + $exception->getMessage();
-            //return redirect()->back()->with('error', $exception->getMessage());
         }
         if (Mail::failures()) {
             return $message = 'email not sent mail failure';
-            //return redirect()->back()->with('error', 'Error sending mail');
         } else {
             return $message = 'email sent success';
-            //return redirect()->back()->with('success', 'Email sent successfully');
-        }
-    }
-
-
-    private function sendEmailWithAttachmentWhileReprintVoucher($request, $memberData)
-    {
-        $data['replyTo'] = 'quizstarmobile@gmail.com';
-        $data['replyToName'] = 'Burlington Springs Team';
-        $data['discountCode'] = $request['discount'];
-        $data['email'] = $memberData->memberData->email;
-        $data['first_name'] = $memberData->memberData->first_name;
-        $data['last_name'] = $memberData->memberData->last_name;
-        $data['package'] = $memberData->membership_type;
-
-        $message = '';
-        try {
-            if ($data['package'] == 'regular' || $data['package'] == 'senior') {
-
-                $pdf = PDF::loadView('pdfs.single-' . $data['package'], compact('data'))
-                    ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
-                    ->setPaper('a4', 'potrait');
-                //return $pdf->download('lukuluku.pdf');
-                Mail::send('mails.single-' . $data['package'], compact('data'), function ($message) use ($data, $pdf) {
-                    $message
-                        ->to($data['email'], $data['first_name'])
-                        ->replyTo($data['replyTo'], $data['replyToName'])
-                        ->subject('Burlington Springs Daily Discount Program')
-                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf');
-                });
-            } else {
-                Mail::send('mails.single-flyer', compact('data'), function ($message) use ($data) {
-                    $message
-                        ->to($data['email'], $data['first_name'])
-                        ->replyTo($data['replyTo'], $data['replyToName'])
-                        ->subject('Burlington Springs Daily Discount Program');
-                });
-            }
-
-            return $message = 'email sent';
-        } catch (JWTException $exception) {
-            return $message = 'email not sent' + $exception->getMessage();
-            //return redirect()->back()->with('error', $exception->getMessage());
-        }
-        if (Mail::failures()) {
-            return $message = 'email not sent mail failure';
-            //return redirect()->back()->with('error', 'Error sending mail');
-        } else {
-            return $message = 'email sent success';
-            //return redirect()->back()->with('success', 'Email sent successfully');
         }
     }
 }

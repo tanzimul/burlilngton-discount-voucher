@@ -6,52 +6,135 @@ $(document).ready(function () {
 
     $('#userTable').DataTable();
 
+    function successMessage(response, selector, button) {
+        console.log('Success message');
+        console.log('Response : '+ response);
+        console.log('Selector : '+ selector);
+        console.log('Button : '+button);
+        var alertHtml = '<div class="alert alert-success alert-dismissible mt-4">';
+        alertHtml += '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
+        alertHtml += '<strong>'+ response.message +'</strong>';
+        alertHtml += '</div>';
+        $( selector+' #message').html(alertHtml);
+        $( button ).attr('disabled', false);
+    }
+
+    function errorMessage(response, selector, button) {
+        console.log('Error message');
+        console.log('Response : '+ response.message);
+        console.log('Selector : '+ selector);
+        console.log('Button : '+button);
+        var alertHtml = '<div class="alert alert-danger alert-dismissible mt-4">';
+        alertHtml += '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
+        if (response.message === "Validation error") {
+            var output = '<ol>';
+            $.each(response.data, function(index, element) {
+                output += '<li>';
+                output += element;
+                output += '</li>';
+            });
+            output += '</ol>';
+            alertHtml += '<strong>'+ output +'</strong>';
+        } else {
+            alertHtml += '<strong>'+ response.message +'</strong>';
+        }
+        alertHtml += '</div>';
+        $( selector+' #message').html(alertHtml);
+        $( button ).attr('disabled', false);
+    }
 
 
     $('#dailyDiscountRedeemedForm #discount').on('change', function(e) {
         e.preventDefault();
-        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         $('#dailyDiscountRedeemedForm #saveForm').html('Searching..');
-        $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", true);
+        $('#dailyDiscountRedeemedForm #saveForm').attr('disabled', true);
         $.ajax({
             url: $('#dailyDiscountRedeemedForm #discountUserSearchUrl').text(),
             type: 'GET',
             data: $('#dailyDiscountRedeemedForm').serialize(),
             success: function (response) {
-                console.log(response);
                 $('#dailyDiscountRedeemedForm #saveForm').html('Save');
-                $('#dailyDiscountRedeemedForm #response').show();
-                $('#dailyDiscountRedeemedForm #alert').show();
-                $('#dailyDiscountRedeemedForm #response').html(response.message);
-                $('#dailyDiscountRedeemedForm #alert').removeClass('d-none');
+                var selector = '#dailyDiscountRedeemedForm';
+                var button = '#dailyDiscountRedeemedForm #saveForm';
+                
                 if (response.status === true) {
-                    $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
+                    successMessage(response, selector, button);
                     $('#dailyDiscountRedeemedForm #lastname').val(response.data);
-                    $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", false);
-                    //document.getElementById("dailyDiscountRedeemedForm").reset();
                 } else {
-                    $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
-                    $('#dailyDiscountRedeemedForm #lastname').val('');
-                    $("#dailyDiscountRedeemedForm #saveForm").attr("disabled", false);
+                    errorMessage(response, selector, button);
                 }
-                setTimeout(function () {
-                    //document.getElementById("dailyDiscountRedeemedForm").reset();
-                    $('#dailyDiscountRedeemedForm #response').hide();
-                    $('#dailyDiscountRedeemedForm #alert').hide();
-                    $('#dailyDiscountRedeemedForm #alert').addClass('d-none');
-                    $('#dailyDiscountRedeemedForm #alert').removeClass('alert-success');
-                    $('#dailyDiscountRedeemedForm #alert').removeClass('alert-danger');
-                }, 3000);
-
             }
         });
 
     })
+
+
+    $("#dailyDiscountRedeemedForm").validate({
+        rules: {
+            date: "required",
+            discount: {
+                required: true,
+                digits: true
+            },
+            phone: {
+                required: false
+            },
+            lastname: {
+                required: false
+            },
+        },
+        messages: {
+            date: "Please select a date first",
+            discount: "Please enter Discount ID",
+            phone: "Please check this if device is phone",
+            lastname: "Please enter customer Last Name"
+        },
+        submitHandler: function (form) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('#dailyDiscountRedeemedForm #saveForm').html('Sending..');
+            $.ajax({
+                url: $('#dailyDiscountRedeemedForm #discountUrl').text(),
+                type: "POST",
+                data: $('#dailyDiscountRedeemedForm').serialize(),
+                success: function (response) {
+                    $('#dailyDiscountRedeemedForm #saveForm').html('Save');
+                    var selector = '#dailyDiscountRedeemedForm';
+                    var button = '#dailyDiscountRedeemedForm #saveForm';
+                    
+                    if (response.status === true) {
+                        successMessage(response, selector, button);
+                        $('#dailyDiscountRedeemedForm #discount').val('');
+                        $('#dailyDiscountRedeemedForm #lastname').val('');
+                        $('#dailyDiscountRedeemedForm #phone').prop('checked', false );
+                    } else {
+                        errorMessage(response, selector, button);
+                    }
+
+                }
+            });
+        }
+
+
+
+    });
+
+
+
+
+
+
+
+
 
 
     jQuery.validator.addMethod("emailCustom", function (value, element, params) {
@@ -107,51 +190,23 @@ $(document).ready(function () {
             });
             
             $('#memberSignupForm #signUpButton').html('Submitting..');
-            $("#memberSignupForm #signUpButton").attr("disabled", true);
-            
-            // console.log($('#reprintForm #reprintUrl').text());
+            $('#memberSignupForm #signUpButton').attr('disabled', true);
             $.ajax({
                 url: $('#memberSignupForm #memberSignUpUrl').text(),
                 type: "POST",
                 data: $('#memberSignupForm').serialize(),
                 success: function (response) {
-                    // console.log(response);
-                    //document.getElementById("dailyDiscountRedeemedForm").reset();
                     $('#memberSignupForm #signUpButton').html('Submit');
-                    $('#memberSignupForm #response').show();
-                    $('#memberSignupForm #alert').show();
-                    if (response.message === "Validation error") {
-                        
-                        var output = '<ul class="error-list">';
-                        $.each(response.data, function(index, element) {
-                            output += '<li>';
-                            output += element;
-                            output += '</li>';
-                        });
-                        $('#memberSignupForm #response').html(output);
-
-                    } else {
-                        $('#memberSignupForm #response').html(response.message);
-                    }
-                    $('#memberSignupForm #alert').removeClass('d-none');
+                    var selector = '#memberSignupForm';
+                    var button = '#memberSignupForm #signUpButton';
+                    
                     if (response.status === true) {
-                        $("#memberSignupForm #signUpButton").attr("disabled", false);
-                        $('#memberSignupForm #alert').addClass('alert-success');
-                        document.getElementById("memberSignupForm").reset();
+                        successMessage(response, selector, button);
+                        document.getElementById('memberSignupForm').reset();
                     } else {
-                        $("#memberSignupForm #signUpButton").attr("disabled", false);
-                        $('#memberSignupForm #alert').addClass('alert-danger');
+                        errorMessage(response, selector, button);
                     }
-
-                    setTimeout(function () {
-                        //document.getElementById("dailyDiscountRedeemedForm").reset();
-                        $('#memberSignupForm #response').hide();
-                        $('#memberSignupForm #alert').hide();
-                        $('#memberSignupForm #alert').addClass('d-none');
-                        $('#memberSignupForm #alert').removeClass('alert-success');
-                        $('#memberSignupForm #alert').removeClass('alert-danger');
-                    }, 5000);
-
+                    
                 }
             });
         }
@@ -259,50 +314,22 @@ $(document).ready(function () {
             
             $('#reprintForm #sendButton').html('Sending..');
             $("#reprintForm #sendButton").attr("disabled", true);
-            
-            // console.log($('#reprintForm #reprintUrl').text());
             $.ajax({
                 url: $('#reprintForm #reprintUrl').text(),
                 type: "POST",
                 data: $('#reprintForm').serialize(),
                 success: function (response) {
-                    console.log(response);
-                    //document.getElementById("dailyDiscountRedeemedForm").reset();
                     $('#reprintForm #sendButton').html('Send');
-                    $('#reprintForm #response').show();
-                    $('#reprintForm #alert').show();
-                    if (response.message === "Validation error") {
-                        
-                        var output = '<ul class="error-list">';
-                        $.each(response.data, function(index, element) {
-                            output += '<li>';
-                            output += element;
-                            output += '</li>';
-                        });
-                        $('#reprintForm #response').html(output);
-
-                    } else {
-                        $('#reprintForm #response').html(response.message);
-                    }
-                    $('#reprintForm #alert').removeClass('d-none');
+                    //new work
+                    var selector = '#reprintForm';
+                    var button = '#reprintForm #sendButton';
+                    
                     if (response.status === true) {
-                        $("#reprintForm #sendButton").attr("disabled", false);
-                        $('#reprintForm #alert').addClass('alert-success');
-                        document.getElementById("reprintForm").reset();
+                        successMessage(response, selector, button);
+                        document.getElementById('reprintForm').reset();
                     } else {
-                        $("#reprintForm #sendButton").attr("disabled", false);
-                        $('#reprintForm #alert').addClass('alert-danger');
+                        errorMessage(response, selector, button);
                     }
-
-                    setTimeout(function () {
-                        //document.getElementById("dailyDiscountRedeemedForm").reset();
-                        $('#reprintForm #response').hide();
-                        $('#reprintForm #alert').hide();
-                        $('#reprintForm #alert').addClass('d-none');
-                        $('#reprintForm #alert').removeClass('alert-success');
-                        $('#reprintForm #alert').removeClass('alert-danger');
-                    }, 5000);
-
                 }
             });
         }
@@ -334,86 +361,7 @@ $(document).ready(function () {
     // });
 
 
-    $("#dailyDiscountRedeemedForm").validate({
-        rules: {
-            date: "required",
-            discount: {
-                required: true,
-                digits: true
-            },
-            phone: {
-                required: false
-            },
-            lastname: {
-                required: false
-            },
-        },
-        messages: {
-            date: "Please select a date first",
-            discount: "Please enter Discount ID",
-            phone: "Please check this if device is phone",
-            lastname: "Please enter customer Last Name"
-        },
-        submitHandler: function (form) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            
-            $('#dailyDiscountRedeemedForm #saveForm').html('Sending..');
-            $.ajax({
-                url: $('#dailyDiscountRedeemedForm #discountUrl').text(),
-                type: "POST",
-                data: $('#dailyDiscountRedeemedForm').serialize(),
-                success: function (response) {
-                    // console.log(response);
-                    //document.getElementById("dailyDiscountRedeemedForm").reset();
-                    $('#dailyDiscountRedeemedForm #saveForm').html('Save');
-                    $('#dailyDiscountRedeemedForm #response').show();
-                    $('#dailyDiscountRedeemedForm #alert').show();
-                    if (response.message === "Validation error") {
-                        
-                        var output = '<ul class="error-list">';
-                        $.each(response.data, function(index, element) {
-                            output += '<li>';
-                            output += element;
-                            output += '</li>';
-                        });
-                        $('#dailyDiscountRedeemedForm #response').html(output);
-
-                    } else {
-                        $('#dailyDiscountRedeemedForm #response').html(response.message);
-                    }
-                    $('#dailyDiscountRedeemedForm #alert').removeClass('d-none');
-                    if (response.status === true) {
-                        $('#dailyDiscountRedeemedForm #alert').addClass('alert-success');
-                        // $('#dailyDiscountRedeemedForm #discount').val('');
-                        // $('#dailyDiscountRedeemedForm #lastname').val('');
-
-                    } else {
-                        $('#dailyDiscountRedeemedForm #alert').addClass('alert-danger');
-                    }
-
-                    setTimeout(function () {
-                        //document.getElementById("dailyDiscountRedeemedForm").reset();
-                        $('#dailyDiscountRedeemedForm #discount').val('');
-                        $('#dailyDiscountRedeemedForm #lastname').val('');
-                        $('#dailyDiscountRedeemedForm #phone').prop('checked', false );
-                        $('#dailyDiscountRedeemedForm #response').hide();
-                        $('#dailyDiscountRedeemedForm #alert').hide();
-                        $('#dailyDiscountRedeemedForm #alert').addClass('d-none');
-                        $('#dailyDiscountRedeemedForm #alert').removeClass('alert-success');
-                        $('#dailyDiscountRedeemedForm #alert').removeClass('alert-danger');
-                    }, 5000);
-
-                }
-            });
-        }
-
-
-
-    });
+    
 
 
 
@@ -451,27 +399,12 @@ $(document).ready(function () {
                     type: "POST",
                     data: $('#customerRecordInquiryForm').serialize() + '&button_type=search',
                     success: function (response) {
-                        // console.log(response);
                         $('#customerRecordInquiryForm #search').html('Search');
-                        $('#customerRecordInquiryForm #response').show();
-                        $('#customerRecordInquiryForm #alert').show();
-
-                        if (response.message === "Validation error") {
-                            var output = '<ul class="error-list">';
-                            $.each(response.data, function(index, element) {
-                                output += '<li>';
-                                output += element;
-                                output += '</li>';
-                            });
-                            $('#customerRecordInquiryForm #response').html(output);
-                        } else {
-                            $('#customerRecordInquiryForm #response').html(response.message);
-                        }
-
-                        $('#customerRecordInquiryForm #alert').removeClass('d-none');
+                        var selector = '#customerRecordInquiryForm';
+                        var button = '#customerRecordInquiryForm #search';
+                        
                         if (response.status === true) {
-                            $('#customerRecordInquiryForm #alert').addClass('alert-success');
-                            // console.log(response.data.member_data);
+                            successMessage(response, selector, button);
                             $('#customerRecordInquiryForm #firstName').val(response.data.first_name);
                             $('#customerRecordInquiryForm #lastName').val(response.data.last_name);
                             $('#customerRecordInquiryForm #emailAddress').val(response.data.email);
@@ -483,21 +416,8 @@ $(document).ready(function () {
                             }
                             $('#customerRecordInquiryForm #discount').val(discount_id);
                         } else {
-                            $('#customerRecordInquiryForm #alert').addClass('alert-danger');
-                            //document.getElementById("customerRecordInquiryForm").reset();
+                            errorMessage(response, selector, button);
                         }
-                        setTimeout(function () {
-                            $('#customerRecordInquiryForm #response').hide();
-                            $('#customerRecordInquiryForm #alert').hide();
-                            $('#customerRecordInquiryForm #alert').addClass('d-none');
-                            $('#customerRecordInquiryForm #alert').removeClass('alert-success');
-                            $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
-                        }, 5000);
-
-                        // setTimeout(function () {
-                        //     document.getElementById("customerRecordInquiryForm").reset();
-                        // }, 60000);
-
                     }
                 });
             });
@@ -514,40 +434,15 @@ $(document).ready(function () {
                     type: "POST",
                     data: $('#customerRecordInquiryForm').serialize() + '&button_type=save',
                     success: function (response) {
-                        //console.log(response);
                         $('#customerRecordInquiryForm #save').html('Save');
-                        $('#customerRecordInquiryForm #response').show();
-                        $('#customerRecordInquiryForm #alert').show();
-
-                        if (response.message === "Validation error") {
-                            var output = '<ul class="error-list">';
-                            $.each(response.data, function(index, element) {
-                                output += '<li>';
-                                output += element;
-                                output += '</li>';
-                            });
-                            $('#customerRecordInquiryForm #response').html(output);
-                        } else {
-                            $('#customerRecordInquiryForm #response').html(response.message);
-                        }
-
-                        $('#customerRecordInquiryForm #alert').removeClass('d-none');
+                        var selector = '#customerRecordInquiryForm';
+                        var button = '#customerRecordInquiryForm #save';
+                        
                         if (response.status === true) {
-                            $('#customerRecordInquiryForm #alert').addClass('alert-success');
-                            // console.log(response);
+                            successMessage(response, selector, button);
                         } else {
-                            $('#customerRecordInquiryForm #alert').addClass('alert-danger');
-                            // document.getElementById("customerRecordInquiryForm").reset();
+                            errorMessage(response, selector, button);
                         }
-
-                        setTimeout(function () {
-                            // document.getElementById("customerRecordInquiryForm").reset();
-                            $('#customerRecordInquiryForm #response').hide();
-                            $('#customerRecordInquiryForm #alert').hide();
-                            $('#customerRecordInquiryForm #alert').addClass('d-none');
-                            $('#customerRecordInquiryForm #alert').removeClass('alert-success');
-                            $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
-                        }, 5000);
 
                     }
                 });
@@ -571,61 +466,31 @@ $(document).ready(function () {
                     dangerMode: true,
                 })
                 .then((willDelete) => {
-                        $('#customerRecordInquiryForm #delete').html('Deleting...');
-                        $.ajax({
-                            url: $('#customerRecordUrl').text(),
-                            type: "POST",
-                            data: $('#customerRecordInquiryForm').serialize() + '&button_type=delete',
-                            success: function (response) {
-                                // console.log(response);
-                                $('#customerRecordInquiryForm #delete').html('Delete');
-                                if (response.status === true) {
-                                    if (willDelete) {
-                                        swal("Deleted!", { icon: "success",});
-                                        document.getElementById("customerRecordInquiryForm").reset();
-                                    }
-                                } else {
-                                    swal("Discount number is not deleted!", { icon: "error",});
-                                    $('#customerRecordInquiryForm #response').show();
-                                    $('#customerRecordInquiryForm #alert').show();
-                                    if (response.message === "Validation error") {
-                                        var output = '<ul class="error-list">';
-                                        $.each(response.data, function(index, element) {
-                                            output += '<li>';
-                                            output += element;
-                                            output += '</li>';
-                                        });
-                                        $('#customerRecordInquiryForm #response').html(output);
-                                    } else {
-                                        $('#customerRecordInquiryForm #response').html(response.message);
-                                    }
-                                    $('#customerRecordInquiryForm #alert').removeClass('d-none');
-                                    $('#customerRecordInquiryForm #alert').addClass('alert-danger');
-                                    setTimeout(function () {
-                                    
-                                        //document.getElementById("customerRecordInquiryForm").reset();
-                                        $('#customerRecordInquiryForm #response').hide();
-                                        $('#customerRecordInquiryForm #alert').hide();
-                                        $('#customerRecordInquiryForm #alert').addClass('d-none');
-                                        $('#customerRecordInquiryForm #alert').removeClass('alert-success');
-                                        $('#customerRecordInquiryForm #alert').removeClass('alert-danger');
-                                    }, 5000);
+                    $('#customerRecordInquiryForm #delete').html('Deleting...');
+                    $.ajax({
+                        url: $('#customerRecordUrl').text(),
+                        type: "POST",
+                        data: $('#customerRecordInquiryForm').serialize() + '&button_type=delete',
+                        success: function (response) {
+                            $('#customerRecordInquiryForm #delete').html('Delete');
+                            var selector = '#customerRecordInquiryForm';
+                            var button = '#customerRecordInquiryForm #save';
+                            
+                            if (response.status === true) {
+                                successMessage(response, selector, button);
+                                if (willDelete) {
+                                    swal('Deleted!', { icon: 'success'});
+                                    document.getElementById("customerRecordInquiryForm").reset();
                                 }
-
+                            } else {
+                                errorMessage(response, selector, button);
+                                swal('Discount number is not deleted!', { icon: 'error'});
                             }
-                        });
+                        }
+                    });
                 });
-
-
             });
-
-
-
-
         }
-
-
-
     });
 
 

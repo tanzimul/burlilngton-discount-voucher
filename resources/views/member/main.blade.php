@@ -42,25 +42,25 @@
                                 <div class="form-group row">
                                     <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="firstName" name="first_name" required >
+                                        <input type="text" class="form-control" id="firstName" name="first_name" required autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="lastName" name="last_name" required >
+                                        <input type="text" class="form-control" id="lastName" name="last_name" required autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="email" name="email" required >
+                                        <input type="text" class="form-control" id="email" name="email" required autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required >
+                                        <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -82,30 +82,7 @@
                                     <div class="d-none" id="memberSignUpUrl">{{ route('member.store') }}</div>
                                     <button class="btn btn-success" type="submit" id="signUpButton">Submit</button>
                                 </div>
-                                <div class="mt-4 alert d-none" id="alert">
-                                    <span id="response"></span>
-                                </div>
-                                <!-- <div class="my-4">
-                                    @if ($errors->any())
-                                    <div class="alert alert-danger" id="alertMessage">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                    @endif
-                                    @if(session('success'))
-                                    <div class="alert alert-success" id="alertMessage">
-                                        {{ session('success') }}
-                                    </div>
-                                    @endif
-                                    @if(session('error'))
-                                    <div class="alert alert-danger" id="alertMessage">
-                                        {{ session('error') }}
-                                    </div>
-                                    @endif
-                                </div> -->
+                                <div id="message"></div>
                             </div>
                             <div class="mt-4">
                                 <div class="text-center">

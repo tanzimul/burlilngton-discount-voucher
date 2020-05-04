@@ -15,6 +15,8 @@ use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Illuminate\Support\Facades\Mail;
+
 class AdminController extends Controller
 {
     /**
@@ -154,14 +156,40 @@ class AdminController extends Controller
         $data['package'] = 'senior';
         $data['discountCode'] = 1109;
 
-        $pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
-            ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
-            ->setPaper('a4', 'potrait');
+        //$pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
+          //  ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
+            //->setPaper('a4', 'potrait');
 
         // $pdf = PDF::loadView('pdfs.single-' . $data['package'], compact('data'))
         //     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
         //     ->setPaper('a4', 'potrait');
-        return $pdf->download('lukuluku.pdf');
+        //return $pdf->download('lukuluku.pdf');
+
+
+        try {
+            
+                Mail::send('mails.regular', compact('data'), function ($message) use ($data) {
+                    $message
+                        ->to($data['email'], $data['first_name'])
+                        ->replyTo($data['replyTo'], $data['replyToName'])
+                        ->subject('Burlington Springs Daily Discount Program');
+                });
+            
+
+            return $message = 'email sent';
+        } catch (JWTException $exception) {
+            return $message = 'email not sent' + $exception->getMessage();
+            //return redirect()->back()->with('error', $exception->getMessage());
+        }
+        if (Mail::failures()) {
+            return $message = 'email not sent mail failure';
+            //return redirect()->back()->with('error', 'Error sending mail');
+        } else {
+            return $message = 'email sent success';
+            //return redirect()->back()->with('success', 'Email sent successfully');
+        }
+
+        
     }
 
     // public function pdfView()
