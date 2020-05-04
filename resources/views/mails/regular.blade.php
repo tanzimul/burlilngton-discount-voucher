@@ -17,6 +17,12 @@
             box-sizing: inherit;
         }
 
+        @font-face {
+            font-family: 'Calibri';
+            font-weight: normal;
+            src: url({{ storage_path('fonts/calibri.ttf') }}) format('truetype');
+        }
+
         body,
         h1,
         h2,
@@ -29,6 +35,7 @@
         ul {
             margin: 0;
             padding: 0;
+            font-family: 'Calibri';
             font-weight: normal;
         }
 

@@ -64,12 +64,21 @@
                                     </div>
                                 </div>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news" checked >
-                                    <label class="col-form-label custom-control-label p-4" for="newsletter">
+                                    <input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter" value="news" checked required>
+                                    <label class="col-form-label custom-control-label p-3" for="newsletter">
                                         Please add me to your list so I can receive news, special events info and promotional offers (required for all discounts)
                                     </label>
                                 </div>
-                                <div class="text-center mt-3">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <div class="package__block--footer">
+                                            <p>- Valid May 11th to Oct 12th, 2020</p>
+                                            <p>- Cannot be used with Tournament play or combined with other offers</p>
+                                            <p>- <strong>To qualify for these discounts each player must present their personalized Daily Discount Voucher on their phone or paper.</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-4 mb-4">
                                     <div class="d-none" id="memberSignUpUrl">{{ route('member.store') }}</div>
                                     <button class="btn btn-success" type="submit" id="signUpButton">Submit</button>
                                 </div>
@@ -105,11 +114,7 @@
                             </div>
 
                         </div>
-                        <div class="package__block--footer">
-                            <p>- Valid May 11th to Oct 12th, 2020</p>
-                            <p>- Cannot be used with Tournament play or combined with other offers</p>
-                            <p>- <strong>To qualify for these discounts each player must present their personalized Daily Discount Voucher on their phone or paper.</strong></p>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

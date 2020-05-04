@@ -32,7 +32,7 @@ class StaffController extends Controller
                 if ($memberSearchByDiscountID != null) {
                     $lastName = $memberSearchByDiscountID->last_name;
                     return response()->json([
-                        'message' => 'User Found from member',
+                        'message' => 'User Found',
                         'status' => true,
                         'data' => $lastName
                     ], 200);
@@ -47,7 +47,7 @@ class StaffController extends Controller
                 if ($discountLog->memberData->is_admin == true) {
                     $lastName = $discountLog->memberData->last_name;
                     return response()->json([
-                        'message' => 'User Found from admin',
+                        'message' => 'User Found',
                         'status' => true,
                         'data' => $lastName
                     ], 200);
@@ -56,13 +56,13 @@ class StaffController extends Controller
                     if ($discountLog->last_used_at != $request['date']) {
                         $lastName = $discountLog->memberData->last_name;
                         return response()->json([
-                            'message' => 'User Found from date' . $discountLog->last_used_at,
+                            'message' => 'User Found',
                             'status' => true,
                             'data' => $lastName
                         ], 200);
                     } else {
                         return response()->json([
-                            'message' => 'Sorry this user already used a discount for today.',
+                            'message' => 'Sorry this user already used a discount for today',
                             'status' => false,
                             'data' => null
                         ], 200);
@@ -86,32 +86,66 @@ class StaffController extends Controller
         ]);
 
         if (!($validator->fails())) {
-            $memberSearchByDiscountID = Member::where('discount_id', $request['discount'])->first();
+            $latestDiscountLog = DiscountProgramLog::latest('last_used_at')->where('discount_id', $request['discount'])->with('memberData')->first();
+            //dd($latestDiscountLog);
+            if($latestDiscountLog == null){
+                //$memberSearchByDiscountID = Member::where('discount_id', $request['discount'])->first();
 
-            if ($memberSearchByDiscountID != null) {
-                $discountLog = DiscountProgramLog::create([
-                    'membership_id' => $memberSearchByDiscountID->id,
-                    'discount_id' => $request['discount'],
-                    'last_used_at' => $request['date'],
-                ]);
-
-                if ($request->has('phone')) {
-                    $memberSearchByDiscountID->device = "phone";
-                    $memberSearchByDiscountID->save();
+                if ($latestDiscountLog != null) {
+                    $discountLog = DiscountProgramLog::create([
+                        'membership_id' => $latestDiscountLog->memberData->id,
+                        'discount_id' => $request['discount'],
+                        'last_used_at' => $request['date'],
+                    ]);
+    
+                    if ($request->has('phone')) {
+                        $latestDiscountLog->memberData->device = "phone";
+                        $latestDiscountLog->memberData->save();
+                    }
+    
+                    return response()->json([
+                        'message' => 'Saved to database',
+                        'status' => true,
+                        'data' => null
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'message' => 'No user found',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
                 }
-
-                return response()->json([
-                    'message' => 'Saved to database',
-                    'status' => true,
-                    'data' => null
-                ], 200);
             } else {
-                return response()->json([
-                    'message' => 'No user found',
-                    'status' => false,
-                    'data' => null
-                ], 200);
+
+                if($latestDiscountLog->memberData->is_admin == true){
+                    $discountLog = DiscountProgramLog::create([
+                        'membership_id' => $latestDiscountLog->memberData->id,
+                        'discount_id' => $request['discount'],
+                        'last_used_at' => $request['date'],
+                    ]);
+    
+                    if ($request->has('phone')) {
+                        $latestDiscountLog->memberData->device = "phone";
+                        $latestDiscountLog->memberData->save();
+                    }
+    
+                    return response()->json([
+                        'message' => 'Saved to database',
+                        'status' => true,
+                        'data' => null
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'message' => 'Sorry this user already used a discount for today.',
+                        'status' => false,
+                        'data' => null
+                    ], 200);
+                }
+                
             }
+
+
+            
         } else {
             return response()->json([
                 'message' => 'Validation error',

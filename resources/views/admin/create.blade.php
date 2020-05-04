@@ -65,7 +65,7 @@
                                         <li>English lowercase characters (a – z)</li>
                                         <li>Base 10 digits (0 – 9)</li>
                                         <li>Non-alphanumeric (For example: !, $, #, or %)</li>
-                                        <li>Unicode characters</li>
+                                        <!-- <li>Unicode characters</li> -->
                                     </ul>
                                 </div>
                             </div>

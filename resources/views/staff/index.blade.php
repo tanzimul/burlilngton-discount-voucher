@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12 col-lg-10">
             <div class="card">
                 <div class="card-header text-center">
                     <h2>Daily Discount Redemptions</h2>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
+        <div class="col-md-12 col-lg-10">
             <div class="card">
                 <div class="card-header text-center">
                     <h2>Customer Record Inquiry/Edit</h2>

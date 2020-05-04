@@ -80,6 +80,7 @@ $(document).ready(function () {
                 required: true,
                 equalTo: "#email"
             },
+            newsletter: "required",
         },
         messages: {
             first_name: {
@@ -96,7 +97,7 @@ $(document).ready(function () {
                 required: "Please enter a valid email address",
                 equalTo: "Please enter the same email as above"
             },
-
+            newsletter: "Please check newsletter option",
         },
         submitHandler: function (form) {
             $.ajaxSetup({
@@ -308,29 +309,29 @@ $(document).ready(function () {
     });
 
 
-    $("#report2").click(function() {
-        $("#fromDate").prop("required", true);
-        $("#fromDate").focus();
-        $("#toDate").prop("required", true);
-    });
-    $("#report3").click(function() {
-        $("#dailyDate").prop("required", true);
-        $("#dailyDate").focus();
-    });
+    // $("#report2").click(function() {
+    //     $("#fromDate").prop("required", true);
+    //     $("#fromDate").focus();
+    //     $("#toDate").prop("required", true);
+    // });
+    // $("#report3").click(function() {
+    //     $("#dailyDate").prop("required", true);
+    //     $("#dailyDate").focus();
+    // });
 
 
 
 
-    $("#exportReportForm").validate({
-        rules: {
-            report: {
-                required: true,
-            },
-        },
-        messages: {
-            report: "Select",
-        }
-    });
+    // $("#exportReportForm").validate({
+    //     rules: {
+    //         report: {
+    //             required: true,
+    //         },
+    //     },
+    //     messages: {
+    //         report: "Select",
+    //     }
+    // });
 
 
     $("#dailyDiscountRedeemedForm").validate({
