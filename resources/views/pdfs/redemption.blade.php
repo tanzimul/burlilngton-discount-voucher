@@ -31,7 +31,7 @@
                 <th>Email</th>
                 <th>Membership Type</th>
                 <th>Discount #</th>
-                <th>Last Used At</th>
+                <th>Last Date Redeemed</th>
             </tr>
         </thead>
         <tbody>

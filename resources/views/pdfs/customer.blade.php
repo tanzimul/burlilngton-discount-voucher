@@ -31,10 +31,8 @@
                 <th>Email</th>
                 <th>Membership Type</th>
                 <th>Discount #</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                
-
+                <th>Enrollment Date</th>
+                <th>Last Information Update Time</th>
             </tr>
         </thead>
         <tbody>

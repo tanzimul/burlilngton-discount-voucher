@@ -42,25 +42,25 @@
                                 <div class="form-group row">
                                     <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="firstName" name="first_name" required autocomplete="off">
+                                        <input type="text" class="form-control" id="firstName" name="first_name" required autocomplete="off" value="Tanzim">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="lastName" name="last_name" required autocomplete="off">
+                                        <input type="text" class="form-control" id="lastName" name="last_name" required autocomplete="off" value="Alam Tanim">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="email" name="email" required autocomplete="off">
+                                        <input type="text" class="form-control" id="email" name="email" required autocomplete="off" value="tanzimul.tanim@gmail.com">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="confirmEmail" class="col-sm-4 col-form-label">Re-enter Email Address</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required autocomplete="off">
+                                        <input type="text" class="form-control" id="confirmEmail" name="confirm_email" required autocomplete="off" value="tanzimul.tanim@gmail.com">
                                     </div>
                                 </div>
                                 <div class="custom-control custom-checkbox">

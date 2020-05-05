@@ -12,7 +12,9 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Mail;
 use env;
 use Illuminate\Support\Facades\Auth;
-// use Intervention\Image\Facades\Image;
+use File;
+use Illuminate\Support\Facades\File as FacadesFile;
+use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
 {
@@ -135,8 +137,8 @@ class MemberController extends Controller
 
 
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -164,8 +166,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -203,8 +205,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -232,8 +234,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -271,8 +273,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -300,8 +302,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        $member = $this->createMember($request, $discountCode);
-                        $newsLetter = $this->createNewsLetter($request, $member);
+                        //$member = $this->createMember($request, $discountCode);
+                        //$newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -392,34 +394,38 @@ class MemberController extends Controller
                 $pdf = PDF::loadView('pdfs.' . $request['package'], compact('data'))
                     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
                     ->setPaper('a4', 'potrait');
-                //return $pdf->download('lukuluku.pdf');
 
+                //$pdf->download('lukuluku.pdf');
+                //$content = $pdf->download()->getOriginalContent();
+                //FacadesFile::put(public_path('pdfs/regular-voucher.pdf'), $pdf->output());
+                // $img = Image::make(public_path('images/regular-voucher.png'))->encode('jpg', 75);
 
-                //$image_path = public_path('images/regular-voucher.png');
-                // $font_path = storage_path('fonts/calibri.ttf');
+                if($request['package'] == 'regular'){
+                    $img = Image::make(public_path('images/regular-voucher.png'));
+                } else {
+                    $img = Image::make(public_path('images/senior-voucher.png'));
+                }
+                
+                $img->text($data['discountCode'].' '.$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
+                    $font->file(storage_path('fonts/calibrib.ttf'));
+                    $font->size(50);
+                    $font->color('#000000');
+                    $font->align('center');
+                    $font->valign('top');
+                });
 
-                //dd($image_path,$font_path);
-                // $img = Image::make($image_path);
-                // $img->text($data['discountCode'].$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
-                //     $font->file(storage_path('fonts/calibrib.ttf'));
-                //     $font->size(50);
-                //     $font->color('#000000');
-                //     $font->align('center');
-                //     $font->valign('top');
-                // });
-                // //return $img;
-                // $img->save(public_path('image_converted'.$data['discountCode'].'.png'));
+                $img->save(public_path('images/discount-images/'.$data['discountCode'].'.png'));
 
-
-                // Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf, $img) {
-                    Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf) {
+                Mail::send('mails.' . $request['package'], compact('data'), function ($message) use ($data, $pdf) {
                     $message
                         ->to($data['email'], $data['first_name'])
                         ->replyTo($data['replyTo'], $data['replyToName'])
                         ->subject('Burlington Springs Daily Discount Program')
-                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf');
-                        //->attach(public_path('image_converted'.$data['discountCode'].'.png'));
+                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf')
+                        ->attach(public_path('images/discount-images/'.$data['discountCode'].'.png'));
                 });
+                //FacadesFile::put(public_path('pdfs/'.$data['discountCode'].'.pdf'), $pdf->output());
+                FacadesFile::delete(public_path('images/discount-images/'.$data['discountCode'].'.png'));
             } else {
                 Mail::send('mails.flyer', compact('data'), function ($message) use ($data) {
                     $message
@@ -442,9 +448,11 @@ class MemberController extends Controller
 
     private function resendEmailWithAttachment($memberData)
     {
-        //dd('from mail',$memberData);
-        $data['replyTo'] = 'quizstarmobile@gmail.com';
-        $data['replyToName'] = 'Burlington Springs Team';
+        // dd('from mail',$memberData);
+        // $data['replyTo'] = 'quizstarmobile@gmail.com';
+        // $data['replyToName'] = 'Burlington Springs Team';
+        $data['replyTo'] = env('MAIL_FROM_ADDRESS');
+        $data['replyToName'] = env('MAIL_FROM_NAME');
         $data['discountCode'] = $memberData->discount_id;
         $data['email'] = $memberData->email;
         $data['first_name'] = $memberData->first_name;
@@ -459,13 +467,34 @@ class MemberController extends Controller
                     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
                     ->setPaper('a4', 'potrait');
                 //return $pdf->download('lukuluku.pdf');
+
+
+                if($data['package'] == 'regular'){
+                    $img = Image::make(public_path('images/regular-voucher.png'));
+                } else {
+                    $img = Image::make(public_path('images/senior-voucher.png'));
+                }
+                
+                $img->text($data['discountCode'].' '.$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
+                    $font->file(storage_path('fonts/calibrib.ttf'));
+                    $font->size(50);
+                    $font->color('#000000');
+                    $font->align('center');
+                    $font->valign('top');
+                });
+
+                $img->save(public_path('images/discount-images/'.$data['discountCode'].'.png'));
+
+
                 Mail::send('mails.' . $data['package'], compact('data'), function ($message) use ($data, $pdf) {
                     $message
                         ->to($data['email'], $data['first_name'])
                         ->replyTo($data['replyTo'], $data['replyToName'])
                         ->subject('Burlington Springs Daily Discount Program')
-                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf');
+                        ->attachData($pdf->output(), 'burlington-springs-daily-discount-program.pdf')
+                        ->attach(public_path('images/discount-images/'.$data['discountCode'].'.png'));
                 });
+                FacadesFile::delete(public_path('images/discount-images/'.$data['discountCode'].'.png'));
             } else {
                 Mail::send('mails.flyer', compact('data'), function ($message) use ($data) {
                     $message
