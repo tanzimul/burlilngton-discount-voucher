@@ -137,8 +137,8 @@ class MemberController extends Controller
 
 
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -166,8 +166,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -205,8 +205,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -234,8 +234,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -273,8 +273,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
@@ -302,8 +302,8 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
                     if($sendEmail == 'email sent'){
-                        //$member = $this->createMember($request, $discountCode);
-                        //$newsLetter = $this->createNewsLetter($request, $member);
+                        $member = $this->createMember($request, $discountCode);
+                        $newsLetter = $this->createNewsLetter($request, $member);
 
                         if(Auth::user()){
                             return response()->json([
