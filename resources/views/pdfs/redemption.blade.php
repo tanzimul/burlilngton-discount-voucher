@@ -43,7 +43,7 @@
                 <td>{{ $discount->memberData->last_name }}</td>
                 <td>{{ $discount->memberData->email }}</td>
                 <td>{{ $discount->memberData->membership_type }}</td>
-                <td>@php echo sprintf('%04d', $discount->memberData->discount_id); @endphp</td>
+                <td>{{ $discount->memberData->discount_id }}</td>
                 <td>
                     @if ($discount->memberData->device == 'phone' && $discount->memberData->is_admin == false) 
                     Yes

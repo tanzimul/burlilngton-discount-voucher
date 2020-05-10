@@ -59,13 +59,12 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="alert alert-dark">
-                                    <p>The password and confirm password field must have at least three of the following five categories:</p>
+                                    <p>The password and confirm password field must have at least three of the following four categories:</p>
                                     <ul>
                                         <li>English uppercase characters (A – Z)</li>
                                         <li>English lowercase characters (a – z)</li>
                                         <li>Base 10 digits (0 – 9)</li>
                                         <li>Non-alphanumeric (For example: !, $, #, or %)</li>
-                                        <!-- <li>Unicode characters</li> -->
                                     </ul>
                                 </div>
                             </div>

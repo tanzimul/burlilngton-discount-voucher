@@ -126,9 +126,7 @@ class MemberController extends Controller
                 if ($maxDiscountProgram == null) {
                     $discountCode = 1000;
                     
-                    
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
-
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
