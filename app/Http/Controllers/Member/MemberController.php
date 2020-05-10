@@ -129,13 +129,6 @@ class MemberController extends Controller
                     
                     $sendEmail = $this->sendEmailWithAttachment($request, $discountCode);
 
-                    // return response()->json([
-                    //     'message' => $sendEmail,
-                    //     'status' => true,
-                    //     'data' => null
-                    // ], 200);
-
-
                     if($sendEmail == 'email sent'){
                         $member = $this->createMember($request, $discountCode);
                         $newsLetter = $this->createNewsLetter($request, $member);
@@ -149,7 +142,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -178,7 +171,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -217,7 +210,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -246,7 +239,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -285,7 +278,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -314,7 +307,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers has been sent to you.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -406,7 +399,7 @@ class MemberController extends Controller
                     $img = Image::make(public_path('images/senior-voucher.png'));
                 }
                 
-                $img->text($data['discountCode'].' '.$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
+                $img->text($data['discountCode'].' '.$data['last_name'].', '.$data['first_name'], 320, 90, function ($font) {
                     $font->file(storage_path('fonts/calibrib.ttf'));
                     $font->size(50);
                     $font->color('#000000');
@@ -475,7 +468,7 @@ class MemberController extends Controller
                     $img = Image::make(public_path('images/senior-voucher.png'));
                 }
                 
-                $img->text($data['discountCode'].' '.$data['last_name'].','.$data['first_name'], 320, 90, function ($font) {
+                $img->text($data['discountCode'].' '.$data['last_name'].', '.$data['first_name'], 320, 90, function ($font) {
                     $font->file(storage_path('fonts/calibrib.ttf'));
                     $font->size(50);
                     $font->color('#000000');

@@ -66,8 +66,8 @@
         <p style="font-size: 15px;margin-bottom: 0;">Regards,</p>
         <p style="font-size: 15px;margin-bottom: 1.2rem;"><strong>The Burlington Springs Team</strong></p>
 
-        <p style="font-size: 15px;margin-bottom: 0.2rem;">* For the “paperless” option, please save the attached ‘single voucher’ JPEG to your phone so you can access present it on each visit to show to the pro shop team.  One easy way to do this is to install a simple Android or iPhone wallet app, save only our voucher to the app, and effectively use it as your “Burlington Springs Voucher” app.</p>
-        <p style="font-size: 15px;margin-bottom: 0.2rem;">Please go to <a href="https://www.burlingtonsprings.com" target="_blank">Daily Discount Program</a> to see apps that we recommend that suit this need.</p>
+        <p style="font-size: 15px;margin-bottom: 0.2rem;">* For the “paperless” option, please save the attached ‘single voucher’ to your phone so you can present it on each visit to show to the pro shop team.  One easy way to do this is to install a simple Android or iPhone wallet app, save only our voucher to the app, and effectively use it as your “Burlington Springs Voucher” app.</p>
+        <p style="font-size: 15px;margin-bottom: 0.2rem;">Please go to <a href="https://www.burlingtonsprings.com/daily-discount/" target="_blank">Daily Discount Program</a> to see apps that we recommend that suit this need.</p>
         <p style="font-size: 15px;margin-bottom: 0.2rem;">If you did not request this email, please advise us by forwarding this email to <a href="mailto:burlingtonsprings@gmail.com">burlingtonsprings@gmail.com</a></p>
     </div>
 </body>

@@ -100,10 +100,10 @@ $(document).ready(function () {
   $('#userTable').DataTable();
 
   function successMessage(response, selector, button) {
-    console.log('Success message');
-    console.log('Response : ' + response);
-    console.log('Selector : ' + selector);
-    console.log('Button : ' + button);
+    // console.log('Success message');
+    // console.log('Response : '+ response);
+    // console.log('Selector : '+ selector);
+    // console.log('Button : '+button);
     var alertHtml = '<div class="alert alert-success alert-dismissible mt-4">';
     alertHtml += '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
     alertHtml += '<strong>' + response.message + '</strong>';
@@ -113,10 +113,10 @@ $(document).ready(function () {
   }
 
   function errorMessage(response, selector, button) {
-    console.log('Error message');
-    console.log('Response : ' + response.message);
-    console.log('Selector : ' + selector);
-    console.log('Button : ' + button);
+    // console.log('Error message');
+    // console.log('Response : '+ response.message);
+    // console.log('Selector : '+ selector);
+    // console.log('Button : '+button);
     var alertHtml = '<div class="alert alert-danger alert-dismissible mt-4">';
     alertHtml += '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
 

@@ -31,7 +31,8 @@
                 <th>Email</th>
                 <th>Membership Type</th>
                 <th>Discount #</th>
-                <th>Last Date Redeemed</th>
+                <th>Transactions Confirmed by Phone</th>
+                <th>Date of Redemption</th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +43,14 @@
                 <td>{{ $discount->memberData->last_name }}</td>
                 <td>{{ $discount->memberData->email }}</td>
                 <td>{{ $discount->memberData->membership_type }}</td>
-                <td>{{ $discount->memberData->discount_id }}</td>
+                <td>@php echo sprintf('%04d', $discount->memberData->discount_id); @endphp</td>
+                <td>
+                    @if ($discount->memberData->device == 'phone' && $discount->memberData->is_admin == false) 
+                    Yes
+                    @else
+                    No
+                    @endif
+                </td>
                 <td>{{ $discount->last_used_at }}</td>
             </tr>
             @endforeach
