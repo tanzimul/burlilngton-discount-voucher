@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Mail;
@@ -26,8 +27,13 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('admin.user', compact('users'));
+        if(Auth::user()->role == 1){
+            $users = User::all();
+            return view('admin.user', compact('users'));
+        } else {
+            return abort(401);
+        }
+
     }
 
     /**
@@ -37,7 +43,11 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
+        if(Auth::user()->role == 1){
+            return view('admin.create');
+        } else {
+            return abort(401);
+        }
     }
 
     /**
@@ -87,9 +97,6 @@ class AdminController extends Controller
 
     public function export(Request $request)
     {
-
-        // dd($request->all());
-
         if($request['report'] == 'customer_record'){
             $validator = Validator::make($request->all(), [
                 'report' => ['required'],
@@ -125,89 +132,10 @@ class AdminController extends Controller
             if (!($validator->fails())) {
                 return Excel::download(new DailyReconciliationExport($request->date), 'Daily Reconciliation List.xlsx');
             } else {
-                //dd($validator->messages());
                 return redirect()->back()->withErrors($validator)->withInput();
             }
         }
         return view('admin.report');
     }
-
-    public function pdfTest()
-    {
-        // $customers = Member::with('discountList')->get();
-        // return view('pdfs.format5', compact('customers'));
-
-        
-        $data['replyTo'] = 'quizstarmobile@gmail.com';
-        $data['replyToName'] = 'Burlington Springs Team';
-        $data['discountCodes'] = [
-            0 => 1199,
-            1 => 1200,
-            2 => 1201,
-            3 => 1202,
-            4 => 1203,
-            5 => 1204,
-            6 => 1205,
-            7 => 1206,
-        ];
-        $data['email'] = 'tanzimul.tanim@gmail.com';
-        $data['first_name'] = 'Tanzimul';
-        $data['last_name'] = 'Alam';
-        $data['package'] = 'senior';
-        $data['discountCode'] = 1109;
-
-        //$pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
-          //  ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
-            //->setPaper('a4', 'potrait');
-
-        // $pdf = PDF::loadView('pdfs.single-' . $data['package'], compact('data'))
-        //     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
-        //     ->setPaper('a4', 'potrait');
-        //return $pdf->download('lukuluku.pdf');
-
-
-        try {
-            
-                Mail::send('mails.regular', compact('data'), function ($message) use ($data) {
-                    $message
-                        ->to($data['email'], $data['first_name'])
-                        ->replyTo($data['replyTo'], $data['replyToName'])
-                        ->subject('Burlington Springs Daily Discount Program');
-                });
-            
-
-            return $message = 'email sent';
-        } catch (JWTException $exception) {
-            return $message = 'email not sent' + $exception->getMessage();
-            //return redirect()->back()->with('error', $exception->getMessage());
-        }
-        if (Mail::failures()) {
-            return $message = 'email not sent mail failure';
-            //return redirect()->back()->with('error', 'Error sending mail');
-        } else {
-            return $message = 'email sent success';
-            //return redirect()->back()->with('success', 'Email sent successfully');
-        }
-
-        
-    }
-
-    // public function pdfView()
-    // {
-    //     //$data = $request->all();
-
-    //     // $data['replyTo'] = env('MAIL_FROM_ADDRESS');
-    //     // $data['replyToName'] = env('MAIL_FROM_NAME');
-
-    //     $data['replyTo'] = 'quizstarmobile@gmail.com';
-    //     $data['replyToName'] = 'QuizKing';
-    //     $data['imageLogo'] = asset('images/BSG-Logo-2020.png');
-    //     $data['imageButton'] = asset('/images/discount-btn.png');
-
-    //     //dd($data);
-        
-    //     $pdf = PDF::loadView('pdfs.format3', compact('data'));
-    //     return $pdf->download('test_'. rand() . '_lab.pdf');
-    // }
 
 }

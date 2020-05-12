@@ -21,7 +21,7 @@ class MemberController extends Controller
 
     public function index()
     {
-        return view('member.main');
+        return view('member.home');
     }
 
 
@@ -373,9 +373,6 @@ class MemberController extends Controller
 
         $data['replyTo'] = env('MAIL_FROM_ADDRESS');
         $data['replyToName'] = env('MAIL_FROM_NAME');
-
-        // $data['replyTo'] = 'quizstarmobile@gmail.com';
-        // $data['replyToName'] = 'Burlington Springs Team';
         $data['discountCode'] = $discountCode;
 
         $message = '';
@@ -385,11 +382,6 @@ class MemberController extends Controller
                 $pdf = PDF::loadView('pdfs.' . $request['package'], compact('data'))
                     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
                     ->setPaper('a4', 'potrait');
-
-                //$pdf->download('lukuluku.pdf');
-                //$content = $pdf->download()->getOriginalContent();
-                //FacadesFile::put(public_path('pdfs/regular-voucher.pdf'), $pdf->output());
-                // $img = Image::make(public_path('images/regular-voucher.png'))->encode('jpg', 75);
 
                 if($request['package'] == 'regular'){
                     $img = Image::make(public_path('images/regular-voucher.png'));
@@ -439,9 +431,6 @@ class MemberController extends Controller
 
     private function resendEmailWithAttachment($memberData)
     {
-        // dd('from mail',$memberData);
-        // $data['replyTo'] = 'quizstarmobile@gmail.com';
-        // $data['replyToName'] = 'Burlington Springs Team';
         $data['replyTo'] = env('MAIL_FROM_ADDRESS');
         $data['replyToName'] = env('MAIL_FROM_NAME');
         $data['discountCode'] = $memberData->discount_id;
@@ -457,8 +446,6 @@ class MemberController extends Controller
                 $pdf = PDF::loadView('pdfs.' . $data['package'], compact('data'))
                     ->setOptions(['dpi' => 96, 'defaultFont' => 'Calibri'])
                     ->setPaper('a4', 'potrait');
-                //return $pdf->download('lukuluku.pdf');
-
 
                 if($data['package'] == 'regular'){
                     $img = Image::make(public_path('images/regular-voucher.png'));
@@ -475,7 +462,6 @@ class MemberController extends Controller
                 });
 
                 $img->save(public_path('images/discount-images/'.$data['discountCode'].'.png'));
-
 
                 Mail::send('mails.' . $data['package'], compact('data'), function ($message) use ($data, $pdf) {
                     $message

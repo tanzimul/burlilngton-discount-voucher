@@ -13,7 +13,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        return view('staff.index');
+        return view('staff.redemption');
     }
 
     public function searchUser(Request $request)
@@ -84,21 +84,6 @@ class StaffController extends Controller
         ]);
 
         if (!($validator->fails())) {
-
-            // $latestDiscountLog = DiscountProgramLog::latest('last_used_at') //->where('discount_id', $request['discount'])->with('memberData')->first();
-            // //->whereDate('last_used_at','=', $request['today'])
-            // ->where('discount_id', $request['discount'])->with('memberData')->first();
-
-            
-
-            // if($latestDiscountLog->last_used_at == $request['today']){
-            //     return response()->json([
-            //         'message' => 'Issue found.',
-            //         'status' => false,
-            //         'data' => $latestDiscountLog
-            //     ], 200);
-            // }
-
             $latestDiscountLog = DiscountProgramLog::whereDate('last_used_at','=', $request['date'])
             ->where('discount_id', $request['discount'])->with('memberData')->first();
 
@@ -337,6 +322,7 @@ class StaffController extends Controller
             }
         }
       
+        // Save End //
 
         // Delete Start //
 
