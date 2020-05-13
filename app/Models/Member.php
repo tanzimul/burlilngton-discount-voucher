@@ -16,7 +16,7 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'membership_type', 'discount_id', 'device', 'print_count', 'is_admin'
+        'first_name', 'last_name', 'email', 'membership_type', 'discount_id', 'print_count', 'is_admin'
     ];
 
     public function discountListLogs (){

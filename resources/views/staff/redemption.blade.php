@@ -104,7 +104,7 @@
                                 <div class="d-none" id="customerRecordUrl">{{ route('staff.customer.record') }}</div>
                                 <input type="hidden" name="member_id" id="memeberId">
                                 <button type="submit" id="search" class="btn btn-success">Search</button>
-                                <button type="submit" id="delete" class="btn btn-success">Delete</button>
+                                <!-- <button type="submit" id="delete" class="btn btn-success">Delete</button> -->
                                 <button type="submit" id="save" class="btn btn-success">Save</button>
                                 <button type="reset" class="btn btn-success text-white">Reset</button>
                                 <div id="message"></div>

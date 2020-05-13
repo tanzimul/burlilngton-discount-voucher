@@ -91,15 +91,23 @@ class StaffController extends Controller
                 $memberSearchByDiscountID = Member::where('discount_id', $request['discount'])->first();
 
                 if ($memberSearchByDiscountID != null) {
-                    $discountLog = DiscountProgramLog::create([
-                        'membership_id' => $memberSearchByDiscountID->id,
-                        'discount_id' => $request['discount'],
-                        'last_used_at' => $request['date'],
-                    ]);
+                    
     
                     if ($request->has('phone')) {
-                        $memberSearchByDiscountID->device = "phone";
-                        $memberSearchByDiscountID->save();
+                        //$memberSearchByDiscountID->device = "phone";
+                        //$memberSearchByDiscountID->save();
+                        $discountLog = DiscountProgramLog::create([
+                            'membership_id' => $memberSearchByDiscountID->id,
+                            'discount_id' => $request['discount'],
+                            'last_used_at' => $request['date'],
+                            'device' => 'phone',
+                        ]);
+                    } else {
+                        $discountLog = DiscountProgramLog::create([
+                            'membership_id' => $memberSearchByDiscountID->id,
+                            'discount_id' => $request['discount'],
+                            'last_used_at' => $request['date'],
+                        ]);
                     }
     
                     return response()->json([
@@ -117,15 +125,24 @@ class StaffController extends Controller
             } else {
 
                 if($latestDiscountLog->memberData->is_admin == true){
-                    $discountLog = DiscountProgramLog::create([
-                        'membership_id' => $latestDiscountLog->memberData->id,
-                        'discount_id' => $request['discount'],
-                        'last_used_at' => $request['date'],
-                    ]);
+                    
     
                     if ($request->has('phone')) {
-                        $latestDiscountLog->memberData->device = "phone";
-                        $latestDiscountLog->memberData->save();
+
+                        // $latestDiscountLog->memberData->device = "phone";
+                        // $latestDiscountLog->memberData->save();
+                        $discountLog = DiscountProgramLog::create([
+                            'membership_id' => $latestDiscountLog->memberData->id,
+                            'discount_id' => $request['discount'],
+                            'last_used_at' => $request['date'],
+                            'device' => 'phone',
+                        ]);
+                    } else {
+                        $discountLog = DiscountProgramLog::create([
+                            'membership_id' => $latestDiscountLog->memberData->id,
+                            'discount_id' => $request['discount'],
+                            'last_used_at' => $request['date'],
+                        ]);
                     }
     
                     return response()->json([

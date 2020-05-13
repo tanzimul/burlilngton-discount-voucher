@@ -16,7 +16,7 @@ class DiscountProgramLog extends Model
      * @var array
      */
     protected $fillable = [
-        'membership_id', 'discount_id', 'last_used_at'
+        'membership_id', 'discount_id', 'device', 'last_used_at'
     ];
 
 

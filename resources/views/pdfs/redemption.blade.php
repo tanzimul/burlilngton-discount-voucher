@@ -45,7 +45,7 @@
                 <td>{{ $discount->memberData->membership_type }}</td>
                 <td>{{ $discount->memberData->discount_id }}</td>
                 <td>
-                    @if ($discount->memberData->device == 'phone' && $discount->memberData->is_admin == false) 
+                    @if ($discount->device == 'phone') 
                     Yes
                     @else
                     No

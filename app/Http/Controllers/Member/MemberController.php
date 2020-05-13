@@ -140,7 +140,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -169,7 +169,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -208,7 +208,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -237,7 +237,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -276,7 +276,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -305,7 +305,7 @@ class MemberController extends Controller
                         }
 
                         return response()->json([
-                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be received shortly.',
+                            'message' => 'Thank your for registering for our Daily Discount Program. An email with your personalized Daily Discount Vouchers will be sent shortly. Please check your Spam folder if you do not see it.',
                             'status' => true,
                             'data' => null
                         ], 200);
@@ -345,7 +345,7 @@ class MemberController extends Controller
             'email' => $request['email'],
             'membership_type' => $request['package'],
             'discount_id' => $discountCode,
-            'device' => 'paper',
+            // 'device' => 'paper',
             'print_count' => 1,
             'is_admin' => 0,
         ]);

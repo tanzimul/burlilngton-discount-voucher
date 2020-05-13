@@ -20,7 +20,6 @@ class CreateMembersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('membership_type','10');
             $table->integer('discount_id');
-            $table->string('device','20')->nullable();
             $table->smallInteger('print_count');
             $table->boolean('is_admin');
             $table->timestamps();

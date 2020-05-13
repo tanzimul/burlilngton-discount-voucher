@@ -28,16 +28,16 @@ class DailyReconciliationExport implements FromView
         //dd(count($discounts->device));
         foreach ($discounts as $key => $discount) {
             if($discount->memberData->membership_type == 'regular'){
-                if( $discount->memberData->device == 'paper'){
-                    $paperRegular[$key] = $discount->memberData->device;
+                if( $discount->device == 'paper'){
+                    $paperRegular[$key] = $discount->device;
                 }else {
-                    $phoneRegular[$key] = $discount->memberData->device;
+                    $phoneRegular[$key] = $discount->device;
                 }
             }else if($discount->memberData->membership_type == 'senior'){
-                if( $discount->memberData->device == 'paper'){
-                    $paperSenior[$key] = $discount->memberData->device;
+                if( $discount->device == 'paper'){
+                    $paperSenior[$key] = $discount->device;
                 }else {
-                    $phoneSenior[$key] = $discount->memberData->device;
+                    $phoneSenior[$key] = $discount->device;
                 }
             }else if($discount->memberData->membership_type == 'flyer'){
                 $flyer[$key] = $discount->memberData->id;
